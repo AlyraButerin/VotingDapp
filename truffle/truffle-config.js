@@ -26,6 +26,8 @@ module.exports = {
 
   // Set default mocha options here, use special reporters, etc.
   mocha: {
+    reporter: "eth-gas-reporter",
+    showTimeSpent: true,
     // timeout: 100000
   },
 

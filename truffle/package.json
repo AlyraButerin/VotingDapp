@@ -8,6 +8,10 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.2",
     "@truffle/hdwallet-provider": "^2.1.12",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "eth-gas-reporter": "^0.2.25"
+  },
+  "devDependencies": {
+    "@openzeppelin/test-helpers": "^0.5.16"
   }
 }
