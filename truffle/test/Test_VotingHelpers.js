@@ -70,9 +70,11 @@ module.exports = {
   },
   mockStartProposal: async (owner, voters) => {
     votingInstance = await Voting.new({ from: owner });
-    voters.forEach(async (voter) => {
-      await votingInstance.addVoter(voter, { from: owner });
-    });
+
+    //forEach cause error due to async, on other computer less powerful
+    for (let i = 0; i < voters.length; i++) {
+      await votingInstance.addVoter(voters[i], { from: owner });
+    }
 
     await votingInstance.startProposalsRegistering({
       from: owner,
