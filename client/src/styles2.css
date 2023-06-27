@@ -93,9 +93,10 @@ hr {
   margin: 2rem 0;
 }
 
-#App .container .welcome h1 {
-  padding-top: 7.5rem;
-  font-size: 2.6rem;
+#App .container .Header {
+
+  font-size: 1.6rem;
+  height: 15%;
 }
 
 #App .container .Main {
@@ -155,10 +156,5 @@ margin-bottom: 2rem;
 #App .container footer a {
   display: inline-block;
   margin: 1rem 1rem 0 0;
-  
-}
-
-.mockup  {
-  border: 3px solid black;
   
 }
