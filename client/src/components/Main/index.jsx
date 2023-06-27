@@ -1,21 +1,14 @@
 import VotesBanner from "./VotesBanner";
-import ProposalBanner from "./ProposalBanner";
+import ActionsBanner from "./ActionsBanner";
 import ResultsBanner from "./ResultsBanner";
 
 function Main() {
 
-    const Main =
-    <>
-      <VotesBanner />
-      <ProposalBanner />
-      <ResultsBanner />
-    </>;
-
-
-
     return (
-      <div className="Main">
-        { Main }
+      <div  style={{border: "1px solid black"}}>
+        <VotesBanner />
+        <ActionsBanner />
+        <ResultsBanner />
       </div>
     );
   }

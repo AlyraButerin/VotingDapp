@@ -10,9 +10,9 @@ function App() {
       <div id="App">
         <div className="container">
           <Header />
-          <hr />
+          
           <Main />
-          <hr />
+        
           <Footer />
         </div>
       </div>
