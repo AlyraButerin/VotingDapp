@@ -1,19 +1,17 @@
 import { EthProvider } from "./contexts/EthContext";
-import Intro from "./components/Intro/";
-import Setup from "./components/Setup";
-import Demo from "./components/Demo";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
+import Main from "./components/Main";
+
 
 function App() {
   return (
     <EthProvider>
       <div id="App">
         <div className="container">
-          <Intro />
+          <Header />
           <hr />
-          <Setup />
-          <hr />
-          <Demo />
+          <Main />
           <hr />
           <Footer />
         </div>
