@@ -1,22 +1,25 @@
-import { EthProvider } from "./contexts/EthContext";
+import { VoteProvider } from "./contexts/VoteContext";
+import { ConnectionProvider } from "./contexts/ConnectionContext";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Main from "./components/Main";
 
-
 function App() {
+  // const [isConnected, setIsConnected] = useState(false);
+
   return (
-    <EthProvider>
-      <div id="App">
-        <div className="container">
-          <Header />
-          
-          <Main />
-        
-          <Footer />
+    <ConnectionProvider>
+      <VoteProvider>
+        <div id="App">
+          <div className="container">
+            <Header />
+            <Main />
+
+            <Footer />
+          </div>
         </div>
-      </div>
-    </EthProvider>
+      </VoteProvider>
+    </ConnectionProvider>
   );
 }
 
