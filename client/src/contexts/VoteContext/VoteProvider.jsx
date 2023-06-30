@@ -105,9 +105,10 @@ function VoteProvider({ children }) {
         //   .getVoter(wallet.accounts[0])
         //   .call({ from: wallet.accounts[0] });
 
+        //add better way : look nearer block / block of contract creation ?
         contract
           .getPastEvents("VoterRegistered", {
-            filter: { address: wallet.accounts[0] },
+            // filter: { voterAddress: wallet.accounts[0] },
             fromBlock: 0,
             toBlock: "latest",
           })

@@ -22,7 +22,7 @@ function ActionsBanner() {
         {voteState.isVoter ? <VoterActions /> : null}
       </>
       <center>
-        <h5>Proposal Banner</h5>
+        <h5>Actions Banner</h5>
       </center>
       <button onClick={handleCreateVote}>Create New Vote</button>
     </div>
