@@ -1,6 +1,7 @@
 /*
 @name: voteState.js
 @description: state management of the vote context
+@updated : add isAdmin and isVoter
 */
 
 /*
@@ -24,6 +25,8 @@ const initialState = {
   deployedAddresses: [],
   contractAddressIndex: null,
   contract: null,
+  isAdmin: false,
+  isVoter: false,
 };
 /*
 @notice : reset state of the vote context
@@ -31,6 +34,8 @@ const initialState = {
 const resetSate = {
   contractAddressIndex: null,
   contract: null,
+  isAdmin: false,
+  isVoter: false,
 };
 
 /*
@@ -54,7 +59,15 @@ const reducer = (voteState, action) => {
       ];
       const contractAddressIndex = deployedAddresses.length - 1;
       const contract = data.contract;
-      const nexData = { deployedAddresses, contractAddressIndex, contract };
+      const isAdmin = true;
+      const isVoter = data.isVoter; //RETIRER / POUR TEST
+      const nexData = {
+        deployedAddresses,
+        contractAddressIndex,
+        contract,
+        isAdmin,
+        isVoter, //RETIRER / POUR TEST
+      };
       return { ...voteState, ...nexData };
     }
     case actions.loadVote:
@@ -62,7 +75,9 @@ const reducer = (voteState, action) => {
       const contractAddressIndex = voteState.deployedAddresses.indexOf(
         data.contract.options.address
       );
-      const nexData = { contractAddressIndex, contract };
+      const isAdmin = data.isAdmin;
+      const isVoter = data.isVoter;
+      const nexData = { contractAddressIndex, contract, isAdmin, isVoter };
       return { ...voteState, ...nexData };
 
     default:

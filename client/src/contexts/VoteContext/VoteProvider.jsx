@@ -25,21 +25,45 @@ function VoteProvider({ children }) {
     const newContract = new voteState.web3.eth.Contract(abi);
     const newContractInstance = await newContract
       .deploy({
-        data: bytecode,
+        data: bytecode, //"0x0" + bytecode, //bytecode,
         arguments: [],
       })
       .send({
         from: wallet.accounts[0],
-        gas: 1500000,
+        gas: 3000000, //1500000
         gasPrice: "30000000000000",
       });
     const address = newContractInstance.options.address;
+
+    /*
+     *
+     *
+     * MODIF CODE ICI
+     * test voter
+     *
+     */
+    await newContractInstance.methods
+      .addVoter(wallet.accounts[0])
+      .send({ from: wallet.accounts[0] });
+    const getVoter = await newContractInstance.methods
+      .getVoter(wallet.accounts[0])
+      .call({ from: wallet.accounts[0] });
+    console.log("RENVOI STRUCT ICI/n/n!!!!!!!isVoter", getVoter);
+    let isVoter = getVoter.isRegistered;
+    /*
+     *
+     *
+     * MODIF CODE ICI
+     *
+     *
+     */
 
     dispatch({
       type: actions.addNewVote,
       data: {
         contractAddress: address,
         contract: newContractInstance,
+        isVoter, //A RETIRER => TEST SEuLEMENT
       },
     });
 
@@ -53,10 +77,55 @@ function VoteProvider({ children }) {
   const connectToVote = async (addressToConnect) => {
     if (addressToConnect) {
       const { abi, web3 } = voteState;
-      let contract;
+      let contract, isAdmin, isVoter, admin;
       //truffle ok mais testnet ??> aussi premiere add ds network vu que migrate
       try {
         contract = new web3.eth.Contract(abi, addressToConnect);
+
+        /*
+         *
+         *
+         * MODIF CODE ICI
+         *
+         *
+         */
+
+        admin = await contract.methods
+          .owner()
+          .call({ from: wallet.accounts[0] });
+        isAdmin = admin.toLowerCase() === wallet.accounts[0];
+        console.log(
+          "(VoteProvider)/connect to vote admin / acc0 : ",
+          admin.toLowerCase(),
+          wallet.accounts[0]
+        );
+        // isAdmin = admin == wallet.accounts[0];
+        console.log("(VoteProvider)/connect to vote isAdmin : ", isAdmin);
+        // isVoter = await contract.methods
+        //   .getVoter(wallet.accounts[0])
+        //   .call({ from: wallet.accounts[0] });
+
+        //add better way : look nearer block / block of contract creation ?
+        contract
+          .getPastEvents("VoterRegistered", {
+            // filter: { voterAddress: wallet.accounts[0] },
+            fromBlock: 0,
+            toBlock: "latest",
+          })
+          .then((events) => {
+            console.log("EVENTS", events);
+            isVoter = events.length > 0;
+            console.log("(VoteProvider)/connect to vote isVoter : ", isVoter);
+          })
+          .catch((err) => console.error(err));
+
+        /*
+         *
+         *
+         * MODIF CODE ICI
+         *
+         *
+         */
       } catch (err) {
         console.error(err);
       }
@@ -65,6 +134,8 @@ function VoteProvider({ children }) {
         type: actions.loadVote,
         data: {
           contract,
+          isAdmin,
+          isVoter,
         },
       });
       console.log("(VoteProvider)/connect to vote : ", voteState);
@@ -113,7 +184,7 @@ function VoteProvider({ children }) {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        const artifact = require("../../contracts/SimpleStorage.json");
+        const artifact = require("../../contracts/Voting.json"); //SimpleStorage.json");
         init(artifact);
       } catch (err) {
         console.error(err);
