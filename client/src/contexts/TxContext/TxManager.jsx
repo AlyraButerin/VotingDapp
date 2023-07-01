@@ -36,7 +36,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
     type: "",
     msg: "",
   });
-
+  const [duration, setDuration] = useState(null);
   /**
    * initializes a tx following the desired function call
    * @dev : be sure to set the correct function name and event
@@ -73,11 +73,43 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
               );
             });
           break;
+        case "endProposalsRegistering":
+          msg = "Transaction initialized : ending proposal registering";
+          contractInstance.methods
+            .endProposalsRegistering()
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx(
+                "Invalid Tx: ending proposal registering rejected"
+              );
+            });
+          break;
+        case "startVotingSession":
+          msg = "Transaction initialized : starting voting session";
+          contractInstance.methods
+            .startVotingSession()
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx("Invalid Tx: starting voting session rejected");
+            });
+          break;
+        case "endVotingSession":
+          msg = "Transaction initialized : ending voting session";
+          contractInstance.methods
+            .endVotingSession()
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx("Invalid Tx: ending voting session rejected");
+            });
+          break;
 
         default:
           break;
       }
-
+      setDuration(5000);
       setStatus({
         sent: true,
         show: show,
@@ -124,9 +156,13 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       type = "danger";
       msg = "Transaction failed : " + cause;
     } else {
+      if (data.callbackObject) {
+        data.callbackObject.callbackFunc(data.callbackObject.callbackParam);
+      }
       type = "success";
       msg = "Transaction processed / txHash : " + txHash;
     }
+    setDuration(10000);
     setStatus({
       sent: true,
       show: show,
@@ -138,15 +174,18 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
   /**
    * @dev handles the closure of the alert
    */
-  const handleOnClose = () => {
+  const handleOnClose = useCallback(() => {
+    const currentMsg = status.msg;
     setStatus({
       sent: true,
       show: false,
       type: "",
       msg: null,
     });
-    closeTx(data.id);
-  };
+    if (!currentMsg.includes("initialized")) {
+      closeTx(data.id);
+    }
+  }, [closeTx, data.id, status.msg]);
 
   /**
    * @todo : change the way the tx is initialized (rendering issue when strict mode)
@@ -156,6 +195,19 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       initTransaction();
     }
   }, [status.sent, initTransaction]);
+
+  useEffect(() => {
+    let timer;
+    if (status.show) {
+      timer = setTimeout(() => {
+        handleOnClose();
+      }, duration);
+      // setTimer(timer);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [status.show, handleOnClose]);
 
   return (
     <>
@@ -169,7 +221,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
           {status.msg}
         </Alert>
       ) : null}
-      {/* {show.status ? (
+      {/* {status.show ? (
         <ToastContainer
           className="p-3"
           position={"bottom-start"}
@@ -177,14 +229,15 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
         >
           <Toast
             onClose={handleOnClose}
-            show={show.status}
-            delay={3000}
+            show={status.show}
+            bg={status.type}
+            delay={10000}
             autohide
           >
             <Toast.Header>
               <strong className="me-auto">Bootstrap</strong>
             </Toast.Header>
-            <Toast.Body>{show.msg}</Toast.Body>
+            <Toast.Body>{status.msg}</Toast.Body>
           </Toast>
         </ToastContainer>
       ) : null} */}

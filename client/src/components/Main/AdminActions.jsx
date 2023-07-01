@@ -17,6 +17,10 @@ function AdminActions() {
     setNewVoter(e.target.value);
   };
 
+  const updateWhiteList = (newVoter) => {
+    setWhiteList([...whiteList, newVoter]);
+    console.log("updateWhiteList via callback", newVoter);
+  };
   //checker taille adresse et validite sinon messgae alerte
   //checker pas deja present
   const handleAddVoter = () => {
@@ -31,38 +35,41 @@ function AdminActions() {
       return;
     }
 
-    initTx(voteState.contract, "AddVoter", newVoter, wallet.accounts[0]);
+    initTx(voteState.contract, "AddVoter", newVoter, wallet.accounts[0], {
+      callbackFunc: updateWhiteList,
+      callbackParam: newVoter,
+    });
 
     // setMove(true);
 
     subscribeEvent(voteState.contract, "VoterRegistered", true);
 
-    setWhiteList([...whiteList, newVoter]);
+    // setWhiteList([...whiteList, newVoter]);
   };
 
   const handleStartProposal = () => {
-    const params = null;
+    // const params = null;
     initTx(
       voteState.contract,
       "startProposalsRegistering",
-      params,
+      null,
       wallet.accounts[0]
     );
     subscribeEvent(voteState.contract, "WorkflowStatusChange", true);
   };
 
   const handleEndProposal = () => {
-    const params = null;
+    // const params = null;
     initTx(
       voteState.contract,
       "endProposalsRegistering",
-      params,
+      null,
       wallet.accounts[0]
     );
     subscribeEvent(voteState.contract, "WorkflowStatusChange", true);
   };
 
-  const hanldeStartVoting = () => {
+  const handleStartVoting = () => {
     const params = null;
     initTx(
       voteState.contract,
@@ -152,7 +159,7 @@ function AdminActions() {
           start proposal registration
         </button>
         <button onClick={handleEndProposal}>End proposal registration</button>
-        <button onClick={hanldeStartVoting}>Start voting session</button>
+        <button onClick={handleStartVoting}>Start voting session</button>
         <button onClick={handleEndVoting}>End voting session</button>
       </div>
     </div>
