@@ -73,6 +73,38 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
               );
             });
           break;
+        case "endProposalsRegistering":
+          msg = "Transaction initialized : ending proposal registering";
+          contractInstance.methods
+            .endProposalsRegistering()
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx(
+                "Invalid Tx: ending proposal registering rejected"
+              );
+            });
+          break;
+        case "startVotingSession":
+          msg = "Transaction initialized : starting voting session";
+          contractInstance.methods
+            .startVotingSession()
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx("Invalid Tx: starting voting session rejected");
+            });
+          break;
+        case "endVotingSession":
+          msg = "Transaction initialized : ending voting session";
+          contractInstance.methods
+            .endVotingSession()
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx("Invalid Tx: ending voting session rejected");
+            });
+          break;
 
         default:
           break;

@@ -48,22 +48,22 @@ function AdminActions() {
   };
 
   const handleStartProposal = () => {
-    const params = null;
+    // const params = null;
     initTx(
       voteState.contract,
       "startProposalsRegistering",
-      params,
+      null,
       wallet.accounts[0]
     );
     subscribeEvent(voteState.contract, "WorkflowStatusChange", true);
   };
 
   const handleEndProposal = () => {
-    const params = null;
+    // const params = null;
     initTx(
       voteState.contract,
       "endProposalsRegistering",
-      params,
+      null,
       wallet.accounts[0]
     );
     subscribeEvent(voteState.contract, "WorkflowStatusChange", true);
