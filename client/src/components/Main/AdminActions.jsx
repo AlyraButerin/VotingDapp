@@ -69,7 +69,7 @@ function AdminActions() {
     subscribeEvent(voteState.contract, "WorkflowStatusChange", true);
   };
 
-  const hanldeStartVoting = () => {
+  const handleStartVoting = () => {
     const params = null;
     initTx(
       voteState.contract,
@@ -159,7 +159,7 @@ function AdminActions() {
           start proposal registration
         </button>
         <button onClick={handleEndProposal}>End proposal registration</button>
-        <button onClick={hanldeStartVoting}>Start voting session</button>
+        <button onClick={handleStartVoting}>Start voting session</button>
         <button onClick={handleEndVoting}>End voting session</button>
       </div>
     </div>
