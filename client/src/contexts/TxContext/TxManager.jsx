@@ -124,6 +124,9 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       type = "danger";
       msg = "Transaction failed : " + cause;
     } else {
+      if (data.callbackObject) {
+        data.callbackObject.callbackFunc(data.callbackObject.callbackParam);
+      }
       type = "success";
       msg = "Transaction processed / txHash : " + txHash;
     }

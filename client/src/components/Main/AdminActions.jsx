@@ -17,6 +17,10 @@ function AdminActions() {
     setNewVoter(e.target.value);
   };
 
+  const updateWhiteList = (newVoter) => {
+    setWhiteList([...whiteList, newVoter]);
+    console.log("updateWhiteList via callback", newVoter);
+  };
   //checker taille adresse et validite sinon messgae alerte
   //checker pas deja present
   const handleAddVoter = () => {
@@ -31,13 +35,16 @@ function AdminActions() {
       return;
     }
 
-    initTx(voteState.contract, "AddVoter", newVoter, wallet.accounts[0]);
+    initTx(voteState.contract, "AddVoter", newVoter, wallet.accounts[0], {
+      callbackFunc: updateWhiteList,
+      callbackParam: newVoter,
+    });
 
     // setMove(true);
 
     subscribeEvent(voteState.contract, "VoterRegistered", true);
 
-    setWhiteList([...whiteList, newVoter]);
+    // setWhiteList([...whiteList, newVoter]);
   };
 
   const handleStartProposal = () => {

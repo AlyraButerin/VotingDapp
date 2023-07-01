@@ -32,6 +32,7 @@ export function TxProvider(props) {
       functionName: "",
       params: null,
       fromAccount: null,
+      callbackObject: null,
     },
   ]);
   /*tx validation state*/
@@ -54,7 +55,13 @@ export function TxProvider(props) {
    * @param {string} functionName
    * @param {any} params
    */
-  const initTx = (contractInstance, functionName, params, fromAccount) => {
+  const initTx = (
+    contractInstance,
+    functionName,
+    params,
+    fromAccount,
+    callbackObject = null
+  ) => {
     setTxArray((oldArray) => {
       const newArray = [...oldArray];
       newArray.push({
@@ -64,6 +71,7 @@ export function TxProvider(props) {
         functionName: functionName,
         params: params,
         fromAccount: fromAccount,
+        callbackObject: callbackObject,
       });
       return newArray;
     });
