@@ -4,28 +4,28 @@ import VoteContext from "./VoteContext";
 import { reducer, actions, initialState } from "./voteState";
 import useConnection from "../ConnectionContext/useConnection";
 
-/*
-@dev : install @metamask/detect-provider => npm install @metamask/detect-provider
-@notice : Provider to manage the vote contract and deployed addresses
-@params : children
-@return : children wrapped by VoteContext.Provider
-*/
+/**
+ * @dev : install @metamask/detect-provider => npm install @metamask/detect-provider
+ * @notice : Provider to manage the vote contract and deployed addresses
+ * @param { any } children
+ * @return : children wrapped by VoteContext.Provider
+ */
 function VoteProvider({ children }) {
   const { wallet } = useConnection();
   const [voteState, dispatch] = useReducer(reducer, initialState);
 
-  /*
-  @dev : create a new vote contract add it to the voteState, and set 
-  the current contract to the new one
-  @params : none
-  @todo : CHANGE send params, ADD CHECKS
-  */
+  /**
+   * @dev : create a new vote contract add it to the voteState, and set 
+   the current contract to the new one
+   * @params : none
+   * @todo : CHANGE send params, ADD CHECKS
+   */
   const createVote = async () => {
     const { abi, bytecode } = voteState;
     const newContract = new voteState.web3.eth.Contract(abi);
     const newContractInstance = await newContract
       .deploy({
-        data: bytecode, //"0x0" + bytecode, //bytecode,
+        data: bytecode,
         arguments: [],
       })
       .send({
@@ -42,14 +42,14 @@ function VoteProvider({ children }) {
      * test voter
      *
      */
-    await newContractInstance.methods
-      .addVoter(wallet.accounts[0])
-      .send({ from: wallet.accounts[0] });
-    const getVoter = await newContractInstance.methods
-      .getVoter(wallet.accounts[0])
-      .call({ from: wallet.accounts[0] });
-    console.log("RENVOI STRUCT ICI/n/n!!!!!!!isVoter", getVoter);
-    let isVoter = getVoter.isRegistered;
+    // await newContractInstance.methods
+    //   .addVoter(wallet.accounts[0])
+    //   .send({ from: wallet.accounts[0] });
+    // const getVoter = await newContractInstance.methods
+    //   .getVoter(wallet.accounts[0])
+    //   .call({ from: wallet.accounts[0] });
+    // console.log("RENVOI STRUCT ICI/n/n!!!!!!!isVoter", getVoter);
+    // let isVoter = getVoter.isRegistered;
     /*
      *
      *
@@ -63,17 +63,17 @@ function VoteProvider({ children }) {
       data: {
         contractAddress: address,
         contract: newContractInstance,
-        isVoter, //A RETIRER => TEST SEuLEMENT
+        // isVoter, //A RETIRER => TEST SEuLEMENT
       },
     });
 
     console.log("(VoteProvider)/new vote deployed, address : ", address);
   };
 
-  /*
-  @dev : connect to an existing vote contract and set the current contract to the new one
-  @params : addressToConnect
-  */
+  /**
+   * @dev : connect to an existing vote contract and set the current contract to the new one
+   * @param { string } addressToConnect
+   */
   const connectToVote = async (addressToConnect) => {
     if (addressToConnect) {
       const { abi, web3 } = voteState;
@@ -142,10 +142,10 @@ function VoteProvider({ children }) {
     }
   };
 
-  /*
-  @dev : init the voteState with the artifact and set the current contract to the first deployed one
-  @params : artifact
-  */
+  /**
+   * @dev : init the voteState with the artifact and set the current contract to the first deployed one
+   * @param { object } artifact
+   */
   const init = useCallback(async (artifact) => {
     if (artifact) {
       const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
@@ -177,10 +177,10 @@ function VoteProvider({ children }) {
     }
   }, []);
 
-  /*
-  @dev : init the voteState with the artifact
-  @notice : it's run only once at the first render
-  */
+  /**
+   * @dev : init the voteState with the artifact
+   * @notice : it's run only once at the first render
+   */
   useEffect(() => {
     const tryInit = async () => {
       try {
@@ -195,10 +195,10 @@ function VoteProvider({ children }) {
     console.log("(VoteProvider)/useEffect", voteState);
   }, []); //[init]);
 
-  /*
-  @dev : watcher on voteState changes
-  @todo : TO REMOVE AT THE END
-  */
+  /**
+   * @dev : watcher on voteState changes
+   * @todo : TO REMOVE AT THE END
+   */
   useEffect(() => {
     console.log(
       "(VoteProvier)/ useEffect watching voteState changes : ",
