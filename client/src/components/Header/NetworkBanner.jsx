@@ -1,5 +1,5 @@
 import useConnection from "../../contexts/ConnectionContext/useConnection";
-
+import { chainIdToName, toShortAddress } from "../../utils/connectionUtils";
 /*
 @dev : display the wallet accounts and the network chainId
 @todo : DEMO VERSION ADD ELEMENTS, REFACTORING
@@ -11,11 +11,11 @@ function NetworkBanner() {
       className="NetworkBanner"
       style={{ display: "flex", flexDirection: "row" }}
     >
-      <label>Wallet Accounts: {wallet?.accounts[0]}</label>
+      <label>Wallet Accounts: {toShortAddress(wallet?.accounts[0])}</label>
 
       <h5 style={{ display: "inline" }}>Network Banner</h5>
 
-      <label>Hex ChainId: {wallet?.chainId}</label>
+      <label>Hex ChainId: {chainIdToName(wallet?.chainId)}</label>
     </div>
   );
 }

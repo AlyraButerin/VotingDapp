@@ -8,9 +8,10 @@ will be used to manage all actions
 function ActionsBanner() {
   const { createVote, voteState } = useVote();
 
-  /*
-  @dev : creation of a new vote
-  */
+  /**
+   * @dev : creation of a new vote
+   * @todo : add confirmation/ error message and update voteadd selector
+   */
   const handleCreateVote = async () => {
     await createVote();
   };
@@ -18,8 +19,8 @@ function ActionsBanner() {
   return (
     <div className="ActionsBannerBanner">
       <>
-        {voteState.isAdmin ? <AdminActions /> : null}
-        {voteState.isVoter ? <VoterActions /> : null}
+        {voteState.isAdmin ? <AdminActions /> : <div>Not Admin</div>}
+        {voteState.isVoter ? <VoterActions /> : <div>Not Voter</div>}
       </>
       <center>
         <h5>Actions Banner</h5>

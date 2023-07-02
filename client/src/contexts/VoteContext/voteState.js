@@ -6,13 +6,14 @@
 
 /*
 @notice : action types to manipulate the state of the vote context
-@todo : rename
+@todo : rename and refactor
 */
 const actions = {
   init: "INIT",
   resetCurrentVote: "RESET",
   addNewVote: "ADD_VOTE",
   loadVote: "LOAD_VOTE",
+  updateVote: "UPDATE_VOTE",
 };
 
 /*
@@ -27,6 +28,7 @@ const initialState = {
   contract: null,
   isAdmin: false,
   isVoter: false,
+  workflowIndex: null,
 };
 /*
 @notice : reset state of the vote context
@@ -36,6 +38,7 @@ const resetSate = {
   contract: null,
   isAdmin: false,
   isVoter: false,
+  workflowIndex: null,
 };
 
 /*
@@ -47,6 +50,7 @@ const resetSate = {
 */
 const reducer = (voteState, action) => {
   const { type, data } = action;
+  let nextData = {};
   switch (type) {
     case actions.init:
       return { ...voteState, ...data };
@@ -59,14 +63,14 @@ const reducer = (voteState, action) => {
       ];
       const contractAddressIndex = deployedAddresses.length - 1;
       const contract = data.contract;
-      const isAdmin = true;
+      const isAdmin = true; //RETIRER / POUR TEST
       const isVoter = data.isVoter; //RETIRER / POUR TEST
       const nexData = {
         deployedAddresses,
         contractAddressIndex,
         contract,
-        isAdmin,
-        isVoter, //RETIRER / POUR TEST
+        // isAdmin,
+        // isVoter, //RETIRER / POUR TEST
       };
       return { ...voteState, ...nexData };
     }
@@ -77,8 +81,25 @@ const reducer = (voteState, action) => {
       );
       const isAdmin = data.isAdmin;
       const isVoter = data.isVoter;
-      const nexData = { contractAddressIndex, contract, isAdmin, isVoter };
+      const workflowIndex = data.workflowIndex;
+      const nexData = {
+        contractAddressIndex,
+        contract,
+        isAdmin,
+        isVoter,
+        workflowIndex,
+      };
       return { ...voteState, ...nexData };
+    case actions.updateVote:
+      // const isAdmin = data.isAdmin;
+      // const isVoter = data.isVoter;
+      // const workflowIndex = data.workflowIndex;
+      nextData = {
+        isAdmin: data.isAdmin,
+        isVoter: data.isVoter,
+        workflowIndex: data.workflowIndex,
+      };
+      return { ...voteState, ...nextData };
 
     default:
       throw new Error("Undefined reducer action type");

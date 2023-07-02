@@ -13,7 +13,8 @@ import useConnection from "../../contexts/ConnectionContext/useConnection";
 @todo : REFACTORING
 */
 function Main() {
-  const { wallet, hasProvider, handleConnect } = useConnection();
+  const { wallet, hasProvider, handleConnect, handleDisconnect } =
+    useConnection();
   const { voteState, connectToVote } = useVote();
 
   const [deployedAddresses, setDeployedAddresses] = useState([]);
@@ -82,7 +83,8 @@ function Main() {
                     : null}
                 </select>
                 {/* @todo : TEMPORARY CODE, USE A NEW COMPONENT INSTEAD */}
-                <button onClick={handleSelectVote}>Select</button>
+                <button onClick={handleSelectVote}>Connect to Vote</button>
+                <button onClick={handleDisconnect}>Disconnect/return</button>
               </label>
               <ActionsBanner />
               <ResultsBanner />
