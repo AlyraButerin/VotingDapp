@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
-import useVote from "../../contexts/VoteContext/useVote";
-import useConnection from "../../contexts/ConnectionContext/useConnection";
-import TxContext from "../../contexts/TxContext/TxContext";
+import useVote from '../../contexts/VoteContext/useVote';
+import useConnection from '../../contexts/ConnectionContext/useConnection';
+import TxContext from '../../contexts/TxContext/TxContext';
 import { useContext } from "react";
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
+import Navbar from 'react-bootstrap/Navbar';
+import Button  from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 function AdminActions() {
   const { initTx, subscribeEvent, addVoter, closeAddVoter } =
@@ -62,7 +69,7 @@ function AdminActions() {
     subscribeEvent(voteState.contract, "WorkflowStatusChange", true);
   };
 
-  const hanldeStartVoting = () => {
+  const handleStartVoting = () => {
     const params = null;
     initTx(
       voteState.contract,
@@ -126,8 +133,8 @@ function AdminActions() {
     getWhiteList();
   }, [voteState.contract]);
 
-  return (
-    <div>
+  return ( 
+    <div className="bg-body-tertiary">
       AdminActions
       <div>
         <select>
@@ -152,10 +159,11 @@ function AdminActions() {
           start proposal registration
         </button>
         <button onClick={handleEndProposal}>End proposal registration</button>
-        <button onClick={hanldeStartVoting}>Start voting session</button>
+        <button onClick={handleStartVoting}>Start voting session</button>
         <button onClick={handleEndVoting}>End voting session</button>
       </div>
     </div>
+         
   );
 }
 

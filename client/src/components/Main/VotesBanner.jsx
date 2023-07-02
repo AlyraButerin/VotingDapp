@@ -1,8 +1,20 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import useVote from "../../contexts/VoteContext/useVote";
+import Form from "react-bootstrap/Form";
+import Button  from "react-bootstrap/Button";
+import Stack from "react-bootstrap/Stack";
+import Navbar from 'react-bootstrap/Navbar';
 
 function VotesBanner() {
-  const { voteState } = useVote();
+  const { voteState, connectToVote } = useVote();
+  const [select, setSelect] = useState(null);
+  const [setDeployedAddresses] = useState([]);
+
+  const handleSelectVote = () => {
+    console.log("handleSelectVote", select);
+    connectToVote(select);
+  };
 
   const displayRoles = () => {
     let roles = "none";
@@ -16,17 +28,33 @@ function VotesBanner() {
   };
 
   return (
-    <div className="VotesBanner">
-      <center>
-        <h5>Votes Banner</h5>
-      </center>
-      <label>connected to vote : </label>
-      <label>none/address 0x454545</label>
-      <label>role (s) : </label>
-      <label>{displayRoles()}</label>
+    <Navbar className="bg-body-tertiary">
+        <Stack direction="horizontal" gap={5}>
+          <Navbar.Text>Select a vote</Navbar.Text>
+      <Form.Select
+        onChange={(e) => {
+          const address = voteState.deployedAddresses.find(
+            (address) => address === e.target.value
+          );
+          
+          setSelect(address);
+        }}
+        style={{width: "350px"}} >
+        {voteState?.deployedAddresses.length > 0
+          ? voteState?.deployedAddresses.map((address, index) => (
+              <option key={index} value={address}>
+                {address}
+              </option>
+            ))
+          : null}
+      </Form.Select>
+      <Button onClick={handleSelectVote} variant="primary">Connecter</Button>
 
-      {/* placer ici le bouton selection add / creation de vote */}
-    </div>
+      <div className="vr" />
+      <Navbar.Text className="justify-content-end">Create a new vote</Navbar.Text>
+      <Button className="justify-content-end" variant="warning">Deploy</Button>
+    </Stack>
+    </Navbar>
   );
 }
 

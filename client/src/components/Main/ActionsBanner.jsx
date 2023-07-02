@@ -21,10 +21,6 @@ function ActionsBanner() {
         {voteState.isAdmin ? <AdminActions /> : null}
         {voteState.isVoter ? <VoterActions /> : null}
       </>
-      <center>
-        <h5>Actions Banner</h5>
-      </center>
-      <button onClick={handleCreateVote}>Create New Vote</button>
     </div>
   );
 }
