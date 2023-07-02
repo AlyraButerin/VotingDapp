@@ -47,6 +47,8 @@ export function TxProvider(props) {
   const [celebrate, setCelebrate] = useState(null);
   const [saddVoter, setAddVoter] = useState(null);
   const [sworkflow, setWorkflow] = useState(null);
+  const [proposalregistered, setProposalregistered] = useState(null);
+  const [voted, setVoted] = useState(null);
 
   /**
    * @dev stores and triggers new transactions
@@ -136,6 +138,22 @@ export function TxProvider(props) {
     setWorkflow(null);
   };
 
+  const forwardProposalregistered = (newProposal) => {
+    setProposalregistered(newProposal);
+  };
+
+  const closeProposalregistered = () => {
+    setProposalregistered(null);
+  };
+
+  const forwardVoted = (newVoted) => {
+    setVoted(newVoted);
+  };
+
+  const closeVoted = () => {
+    setVoted(null);
+  };
+
   return (
     <>
       <TxContext.Provider
@@ -151,6 +169,12 @@ export function TxProvider(props) {
           sworkflow,
           setWorkflow,
           closeWorkflow,
+          proposalregistered,
+          setProposalregistered,
+          closeProposalregistered,
+          voted,
+          setVoted,
+          closeVoted,
           alertInvalidTx,
           setAlertInvalidTx,
         }}

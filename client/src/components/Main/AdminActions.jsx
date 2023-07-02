@@ -4,7 +4,7 @@ import useConnection from "../../contexts/ConnectionContext/useConnection";
 import TxContext from "../../contexts/TxContext/TxContext";
 import { useContext } from "react";
 
-function AdminActions() {
+function AdminActions({ setIsVoteTallied }) {
   const { initTx, subscribeEvent, addVoter, closeAddVoter } =
     useContext(TxContext);
 
@@ -12,6 +12,13 @@ function AdminActions() {
   const { wallet } = useConnection();
   const [whiteList, setWhiteList] = useState([]);
   const [newVoter, setNewVoter] = useState("");
+
+  const [disabledButton, setDisabledButton] = useState([
+    true,
+    true,
+    true,
+    true,
+  ]);
 
   const handleChange = (e) => {
     setNewVoter(e.target.value);
@@ -24,18 +31,20 @@ function AdminActions() {
   //checker taille adresse et validite sinon messgae alerte
   //checker pas deja present
   const handleAddVoter = () => {
+    let errMsg = null;
     if (newVoter.length !== 42) {
-      alert("Please enter a valid address");
-      setNewVoter("");
-      return;
+      errMsg = "Please enter a valid address";
     }
     if (whiteList.includes(newVoter)) {
-      alert("This address is already in the whitelist");
+      errMsg = "This address is already in the whitelist";
+    }
+    if (errMsg) {
+      alert(errMsg);
       setNewVoter("");
       return;
     }
 
-    initTx(voteState.contract, "AddVoter", newVoter, wallet.accounts[0], {
+    initTx(voteState.contract, "addVoter", newVoter, wallet.accounts[0], {
       callbackFunc: updateWhiteList,
       callbackParam: newVoter,
     });
@@ -82,43 +91,13 @@ function AdminActions() {
 
   const handleEndVoting = () => {
     const params = null;
-    initTx(voteState.contract, "endVotingSession", params, wallet.accounts[0]);
+
+    initTx(voteState.contract, "endVotingSession", params, wallet.accounts[0], {
+      callbackFunc: setIsVoteTallied,
+      callbackParam: true,
+    });
     subscribeEvent(voteState.contract, "WorkflowStatusChange", true);
   };
-  /*
-  //checker taille adresse et validite sinon messgae alerte
-  //checker pas deja present
-  const handleAddVoter = async () => {
-    if (newVoter.length !== 42) {
-      alert("Please enter a valid address");
-      setNewVoter("");
-      return;
-    }
-    if (whiteList.includes(newVoter)) {
-      alert("This address is already in the whitelist");
-      setNewVoter("");
-      return;
-    }
-    const receipt = await voteState.contract.methods
-      .addVoter(newVoter)
-      .send({ from: wallet.accounts[0] })
-      .on("transactionHash", function (hash) {
-        console.log("ADDVOTER, txhash", hash);
-      })
-      .on("receipt", function (receipt) {
-        console.log("ADDVOTER, receipt", receipt);
-      })
-      .on("confirmation", function (confirmationNumber, receipt) {
-        console.log("ADDVOTER, confirmation", confirmationNumber, receipt);
-      })
-      .on("error", function (error, receipt) {
-        console.log("ADDVOTER, error", error);
-        console.log("ADDVOTER, receipt", receipt);
-      });
-    console.log("ADDVOTER TX END, receipt", receipt);
-    setWhiteList([...whiteList, newVoter]);
-  };
-  */
 
   //rempli whitelist avec les adresses du contract en cherchant dans les events
   useEffect(() => {
@@ -132,6 +111,13 @@ function AdminActions() {
     };
     getWhiteList();
   }, [voteState.contract]);
+
+  useEffect(() => {
+    const newDisabledButton = [true, true, true, true];
+    newDisabledButton[voteState.workflowIndex] = false;
+    setDisabledButton(newDisabledButton);
+    console.log("useEffect index", voteState.workflowIndex);
+  }, [voteState.workflowIndex]);
 
   return (
     <div>
@@ -155,12 +141,18 @@ function AdminActions() {
       </div>
       <div>
         workflow
-        <button onClick={handleStartProposal}>
+        <button onClick={handleStartProposal} disabled={disabledButton[0]}>
           start proposal registration
         </button>
-        <button onClick={handleEndProposal}>End proposal registration</button>
-        <button onClick={handleStartVoting}>Start voting session</button>
-        <button onClick={handleEndVoting}>End voting session</button>
+        <button onClick={handleEndProposal} disabled={disabledButton[1]}>
+          End proposal registration
+        </button>
+        <button onClick={handleStartVoting} disabled={disabledButton[2]}>
+          Start voting session
+        </button>
+        <button onClick={handleEndVoting} disabled={disabledButton[3]}>
+          End voting session
+        </button>
       </div>
     </div>
   );

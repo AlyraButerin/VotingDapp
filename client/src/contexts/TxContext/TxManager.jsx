@@ -37,6 +37,32 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
     msg: "",
   });
   const [duration, setDuration] = useState(null);
+  const { updateContractInfos } = useVote();
+
+  const isNeedingUpdate = (funcName) => {
+    let needUpdate = false;
+    switch (funcName) {
+      case "AddVoter":
+        needUpdate = true;
+        break;
+      case "startProposalsRegistering":
+        needUpdate = true;
+        break;
+      case "endProposalsRegistering":
+        needUpdate = true;
+        break;
+      case "startVotingSession":
+        needUpdate = true;
+        break;
+      case "endVotingSession":
+        needUpdate = true;
+        break;
+
+      default:
+        break;
+    }
+    return needUpdate;
+  };
   /**
    * initializes a tx following the desired function call
    * @dev : be sure to set the correct function name and event
@@ -51,7 +77,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       let msg;
 
       switch (functionName) {
-        case "AddVoter":
+        case "addVoter":
           msg = "Transaction initialized : adding voter";
           contractInstance.methods
             .addVoter(params)
@@ -105,11 +131,30 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
               setAlertInvalidTx("Invalid Tx: ending voting session rejected");
             });
           break;
-
+        case "addProposal":
+          msg = "Transaction initialized : adding proposal";
+          contractInstance.methods
+            .addProposal(params)
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx("Invalid Tx: adding proposal rejected");
+            });
+          break;
+        case "setVote":
+          msg = "Transaction initialized : voting";
+          contractInstance.methods
+            .setVote(params)
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx("Invalid Tx: voting rejected");
+            });
+          break;
         default:
           break;
       }
-      setDuration(5000);
+      setDuration(3000);
       setStatus({
         sent: true,
         show: show,
@@ -130,6 +175,8 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
    * / so 32603 will be triggered before error on tx (action of the user to confirm/reject)
    */
   const handleTx = (error, txHash) => {
+    const { contractInstance, functionName, callbackObject } = data;
+
     const show = true;
     let type, msg;
 
@@ -156,13 +203,24 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       type = "danger";
       msg = "Transaction failed : " + cause;
     } else {
-      if (data.callbackObject) {
-        data.callbackObject.callbackFunc(data.callbackObject.callbackParam);
+      if (callbackObject) {
+        if (callbackObject.callbackParam !== null) {
+          callbackObject.callbackFunc(callbackObject.callbackParam);
+        } else {
+          callbackObject.callbackFunc();
+        }
+      }
+
+      //ATTENTION VERIFIER BON UPDATE QD ADDVOTER et add le owner lui meme
+      //info immediate null (liée à revert de getVoter sur même tx ?(pb async ??)
+      if (isNeedingUpdate(functionName)) {
+        console.log("HANDLE TX CALL UPDATE");
+        updateContractInfos(contractInstance);
       }
       type = "success";
       msg = "Transaction processed / txHash : " + txHash;
     }
-    setDuration(10000);
+    setDuration(6000);
     setStatus({
       sent: true,
       show: show,
