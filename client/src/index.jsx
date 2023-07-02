@@ -4,7 +4,7 @@ import App from "./App";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-//import "./styles.css";
+import "./styles.css";
 
 //TODO : uncomment React.StrictMode => error with txmanager rerendering initTx
 

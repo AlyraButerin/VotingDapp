@@ -4,6 +4,7 @@ import { TxProvider } from "./contexts/TxContext/TxContext";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Main from "./components/Main";
+import Container from "react-bootstrap/Container";
 
 function App() {
   // const [isConnected, setIsConnected] = useState(false);
@@ -12,14 +13,14 @@ function App() {
     <ConnectionProvider>
       <VoteProvider>
         <TxProvider>
-          <div id="App">
-            <div className="container">
-              <Header />
-              <Main />
+          <Container id="App" fluid style={{ height: "100%" }}>
+            {/* <div className="container"> */}
+            <Header />
+            <Main />
 
-              <Footer />
-            </div>
-          </div>
+            <Footer />
+          </Container>
+          {/* </div> */}
         </TxProvider>
       </VoteProvider>
     </ConnectionProvider>
