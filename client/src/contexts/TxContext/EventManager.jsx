@@ -18,6 +18,7 @@ export default function EventManager(props) {
     type: "",
     data: "",
   });
+  const [duration, setDuration] = useState(null);
 
   /**
    * handles result of the event
@@ -39,6 +40,7 @@ export default function EventManager(props) {
         } else {
           type = "success";
           data = event.returnValues;
+          setDuration(5000);
           /*the event was initiated to forward its result*/
           // if (props.data.callback) {
           // if()
@@ -79,12 +81,45 @@ export default function EventManager(props) {
         } else {
           type = "success";
           data = event.returnValues;
+          setDuration(5000);
           /*the event was initiated to forward its result*/
           // if (props.data.callback) {
           // if()
 
           props.forwardAddVoter({
             voterAddress: data.voterAddress,
+          });
+          // }
+        }
+      }
+      setShow({
+        status: true,
+        type: type,
+        data: data,
+      });
+    },
+    [show.type, show.data, props]
+  );
+
+  const handleEventPR = useCallback(
+    function (error, event) {
+      let type = show.type;
+      let data = show.data;
+
+      if (show.type === "") {
+        if (error) {
+          type = "danger";
+          data = error;
+        } else {
+          type = "success";
+          data = event.returnValues;
+          setDuration(5000);
+          /*the event was initiated to forward its result*/
+          // if (props.data.callback) {
+          // if()
+
+          props.forwardProposalregistered({
+            proposalId: data.proposalId,
           });
           // }
         }
@@ -111,6 +146,7 @@ export default function EventManager(props) {
         } else {
           type = "success";
           data = event.returnValues;
+          setDuration(5000);
           /*the event was initiated to forward its result*/
           // if (props.data.callback) {
           // if()
@@ -131,17 +167,58 @@ export default function EventManager(props) {
     },
     [show.type, show.data, props]
   );
+
+  const handleEventV = useCallback(
+    function (error, event) {
+      let type = show.type;
+      let data = show.data;
+
+      if (show.type === "") {
+        if (error) {
+          type = "danger";
+          data = error;
+        } else {
+          type = "success";
+          data = event.returnValues;
+          setDuration(5000);
+          /*the event was initiated to forward its result*/
+          // if (props.data.callback) {
+          // if()
+
+          props.forwardVoted({
+            voter: data.voter,
+            proposalId: data.proposalId,
+          });
+          // }
+        }
+      }
+      setShow({
+        status: true,
+        type: type,
+        data: data,
+      });
+    },
+    [show.type, show.data, props]
+  );
+
   /**
    * handles the closure of the alert
    */
-  const handleOnClose = () => {
+  // const handleOnClose = () => {
+  //   setShow({
+  //     status: false,
+  //     type: "",
+  //     data: null,
+  //   });
+  // };
+  ///ICICI
+  const handleOnClose = useCallback(() => {
     setShow({
-      show: false,
+      status: false,
       type: "",
       data: null,
     });
-  };
-
+  }, []);
   /**
    * initializes a new event listener
    *
@@ -171,6 +248,17 @@ export default function EventManager(props) {
             props.data.instance.events.WorkflowStatusChange
           );
           break;
+        case "ProposalRegistered":
+          props.data.instance.events.ProposalRegistered(handleEventPR);
+          console.log(
+            "EVENTMANAGER/ ProposalRegistered",
+            props.data.instance.events.ProposalRegistered
+          );
+          break;
+        case "Voted":
+          props.data.instance.events.Voted(handleEventV);
+          console.log("EVENTMANAGER/ Voted", props.data.instance.events.Voted);
+          break;
         default:
           break;
       }
@@ -181,7 +269,14 @@ export default function EventManager(props) {
         msg: "event initalized",
       });
     },
-    [props.data, handleEventB, handleEventVR, handleEventSP]
+    [
+      props.data,
+      handleEventB,
+      handleEventVR,
+      handleEventSP,
+      handleEventPR,
+      handleEventV,
+    ]
   );
 
   /**
@@ -263,6 +358,20 @@ export default function EventManager(props) {
       initSubscription();
     }
   }, [props.data, data, initSubscription]);
+
+  //ICICICICI
+  useLayoutEffect(() => {
+    let timer;
+    if (show.status) {
+      timer = setTimeout(() => {
+        handleOnClose();
+      }, duration);
+      // setTimer(timer);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [show.status, handleOnClose]);
 
   return (
     <>

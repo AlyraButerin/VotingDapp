@@ -5,7 +5,7 @@ import VoterActions from "./VoterActions";
 @dev :  <ActionsBanner /> is a component of <Main />.
 will be used to manage all actions
 */
-function ActionsBanner() {
+function ActionsBanner({ setIsVoteTallied }) {
   const { createVote, voteState } = useVote();
 
   /**
@@ -19,7 +19,11 @@ function ActionsBanner() {
   return (
     <div className="ActionsBannerBanner">
       <>
-        {voteState.isAdmin ? <AdminActions /> : <div>Not Admin</div>}
+        {voteState.isAdmin ? (
+          <AdminActions setIsVoteTallied={setIsVoteTallied} />
+        ) : (
+          <div>Not Admin</div>
+        )}
         {voteState.isVoter ? <VoterActions /> : <div>Not Voter</div>}
       </>
       <center>

@@ -27,7 +27,7 @@ function VoterActions() {
   };
 
   const handleAddProposal = () => {
-    initTx(voteState.contract, "AddProposal", newProposal, wallet.accounts[0], {
+    initTx(voteState.contract, "addProposal", newProposal, wallet.accounts[0], {
       callbackFunc: updateProposals,
       callbackParam: newProposal,
     });
@@ -72,7 +72,7 @@ function VoterActions() {
         </select>
         <input
           type="text"
-          placeholder="Enter a new voter address"
+          placeholder="Enter a proposal"
           onChange={handleProposalChange}
         />
 

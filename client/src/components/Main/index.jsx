@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import VotesBanner from "./VotesBanner";
 import ActionsBanner from "./ActionsBanner";
 import ResultsBanner from "./ResultsBanner";
@@ -19,6 +19,12 @@ function Main() {
 
   const [deployedAddresses, setDeployedAddresses] = useState([]);
   const [select, setSelect] = useState(null);
+  const [isVoteTallied, setIsVoteTallied] = useState(false);
+  const [winningProposal, setWinningProposal] = useState({
+    id: null,
+    description: null,
+    voteCount: null,
+  });
 
   /*
   @dev :  handleSelectVote
@@ -26,6 +32,21 @@ function Main() {
   const handleSelectVote = () => {
     console.log("handleSelectVote", select);
     connectToVote(select);
+  };
+
+  const getWinningProposal = async () => {
+    const winningProposalId = await voteState.contract.methods
+      .winningProposalID()
+      .call({ from: wallet.accounts[0] });
+    const winningProposal = await voteState.contract.methods
+      .getOneProposal(winningProposalId)
+      .call({ from: wallet.accounts[0] });
+    setWinningProposal({
+      id: winningProposalId,
+      description: winningProposal.description,
+      voteCount: winningProposal.voteCount,
+    });
+    console.log("winningProposal", winningProposal, winningProposalId);
   };
 
   /*
@@ -52,6 +73,19 @@ function Main() {
   useEffect(() => {
     console.log("(index/Main)/useEffect voteState", voteState);
   }, [voteState]);
+
+  useLayoutEffect(() => {
+    console.log("LAYOUTEFFECT POUR GET WINNER");
+    //TEST callback après tallied
+    const updateWinningProposal = () => {
+      console.log("CALLED FROM CALLBAKC AFTER LAYOUT EFFECT");
+      getWinningProposal();
+    };
+    if (isVoteTallied) {
+      updateWinningProposal();
+      console.log("LAYOUTEFFECT POUR GET WINNER, IF PASSED");
+    }
+  }, [isVoteTallied]);
 
   return (
     // INTEGRER UN ALERT POUR METAMASK UNINSTALLED
@@ -86,8 +120,11 @@ function Main() {
                 <button onClick={handleSelectVote}>Connect to Vote</button>
                 <button onClick={handleDisconnect}>Disconnect/return</button>
               </label>
-              <ActionsBanner />
-              <ResultsBanner />
+              <ActionsBanner setIsVoteTallied={setIsVoteTallied} />
+              <ResultsBanner
+                winningProposal={winningProposal}
+                getWinningProposal={getWinningProposal}
+              />
               {/* @todo : REMOVE DEMO INFOS */}
               <label>Wallet Accounts: {wallet?.accounts[0]}</label>
               <label>Wallet Balance: {wallet?.balance}</label> {/* New */}

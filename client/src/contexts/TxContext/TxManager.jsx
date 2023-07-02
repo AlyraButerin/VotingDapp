@@ -77,7 +77,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       let msg;
 
       switch (functionName) {
-        case "AddVoter":
+        case "addVoter":
           msg = "Transaction initialized : adding voter";
           contractInstance.methods
             .addVoter(params)
@@ -154,7 +154,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
         default:
           break;
       }
-      setDuration(5000);
+      setDuration(3000);
       setStatus({
         sent: true,
         show: show,
@@ -175,7 +175,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
    * / so 32603 will be triggered before error on tx (action of the user to confirm/reject)
    */
   const handleTx = (error, txHash) => {
-    const { contractInstance, functionName } = data;
+    const { contractInstance, functionName, callbackObject } = data;
 
     const show = true;
     let type, msg;
@@ -203,8 +203,12 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       type = "danger";
       msg = "Transaction failed : " + cause;
     } else {
-      if (data.callbackObject) {
-        data.callbackObject.callbackFunc(data.callbackObject.callbackParam);
+      if (callbackObject) {
+        if (callbackObject.callbackParam !== null) {
+          callbackObject.callbackFunc(callbackObject.callbackParam);
+        } else {
+          callbackObject.callbackFunc();
+        }
       }
 
       //ATTENTION VERIFIER BON UPDATE QD ADDVOTER et add le owner lui meme
@@ -216,7 +220,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       type = "success";
       msg = "Transaction processed / txHash : " + txHash;
     }
-    setDuration(10000);
+    setDuration(6000);
     setStatus({
       sent: true,
       show: show,

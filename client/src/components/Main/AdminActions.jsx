@@ -4,7 +4,7 @@ import useConnection from "../../contexts/ConnectionContext/useConnection";
 import TxContext from "../../contexts/TxContext/TxContext";
 import { useContext } from "react";
 
-function AdminActions() {
+function AdminActions({ setIsVoteTallied }) {
   const { initTx, subscribeEvent, addVoter, closeAddVoter } =
     useContext(TxContext);
 
@@ -44,7 +44,7 @@ function AdminActions() {
       return;
     }
 
-    initTx(voteState.contract, "AddVoter", newVoter, wallet.accounts[0], {
+    initTx(voteState.contract, "addVoter", newVoter, wallet.accounts[0], {
       callbackFunc: updateWhiteList,
       callbackParam: newVoter,
     });
@@ -91,7 +91,11 @@ function AdminActions() {
 
   const handleEndVoting = () => {
     const params = null;
-    initTx(voteState.contract, "endVotingSession", params, wallet.accounts[0]);
+
+    initTx(voteState.contract, "endVotingSession", params, wallet.accounts[0], {
+      callbackFunc: setIsVoteTallied,
+      callbackParam: true,
+    });
     subscribeEvent(voteState.contract, "WorkflowStatusChange", true);
   };
 
