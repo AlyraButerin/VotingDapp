@@ -36,7 +36,33 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
     type: "",
     msg: "",
   });
+  const [duration, setDuration] = useState(null);
+  const { updateContractInfos } = useVote();
 
+  const isNeedingUpdate = (funcName) => {
+    let needUpdate = false;
+    switch (funcName) {
+      case "AddVoter":
+        needUpdate = true;
+        break;
+      case "startProposalsRegistering":
+        needUpdate = true;
+        break;
+      case "endProposalsRegistering":
+        needUpdate = true;
+        break;
+      case "startVotingSession":
+        needUpdate = true;
+        break;
+      case "endVotingSession":
+        needUpdate = true;
+        break;
+
+      default:
+        break;
+    }
+    return needUpdate;
+  };
   /**
    * initializes a tx following the desired function call
    * @dev : be sure to set the correct function name and event
@@ -51,7 +77,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       let msg;
 
       switch (functionName) {
-        case "AddVoter":
+        case "addVoter":
           msg = "Transaction initialized : adding voter";
           contractInstance.methods
             .addVoter(params)
@@ -73,11 +99,62 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
               );
             });
           break;
-
+        case "endProposalsRegistering":
+          msg = "Transaction initialized : ending proposal registering";
+          contractInstance.methods
+            .endProposalsRegistering()
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx(
+                "Invalid Tx: ending proposal registering rejected"
+              );
+            });
+          break;
+        case "startVotingSession":
+          msg = "Transaction initialized : starting voting session";
+          contractInstance.methods
+            .startVotingSession()
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx("Invalid Tx: starting voting session rejected");
+            });
+          break;
+        case "endVotingSession":
+          msg = "Transaction initialized : ending voting session";
+          contractInstance.methods
+            .endVotingSession()
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx("Invalid Tx: ending voting session rejected");
+            });
+          break;
+        case "addProposal":
+          msg = "Transaction initialized : adding proposal";
+          contractInstance.methods
+            .addProposal(params)
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx("Invalid Tx: adding proposal rejected");
+            });
+          break;
+        case "setVote":
+          msg = "Transaction initialized : voting";
+          contractInstance.methods
+            .setVote(params)
+            .send({ from: fromAccount }, handleTx)
+            .on("error", function (e) {
+              console.log("initTransaction/ error", e);
+              setAlertInvalidTx("Invalid Tx: voting rejected");
+            });
+          break;
         default:
           break;
       }
-
+      setDuration(3000);
       setStatus({
         sent: true,
         show: show,
@@ -98,6 +175,8 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
    * / so 32603 will be triggered before error on tx (action of the user to confirm/reject)
    */
   const handleTx = (error, txHash) => {
+    const { contractInstance, functionName, callbackObject } = data;
+
     const show = true;
     let type, msg;
 
@@ -124,9 +203,24 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       type = "danger";
       msg = "Transaction failed : " + cause;
     } else {
+      if (callbackObject) {
+        if (callbackObject.callbackParam !== null) {
+          callbackObject.callbackFunc(callbackObject.callbackParam);
+        } else {
+          callbackObject.callbackFunc();
+        }
+      }
+
+      //ATTENTION VERIFIER BON UPDATE QD ADDVOTER et add le owner lui meme
+      //info immediate null (liée à revert de getVoter sur même tx ?(pb async ??)
+      if (isNeedingUpdate(functionName)) {
+        console.log("HANDLE TX CALL UPDATE");
+        updateContractInfos(contractInstance);
+      }
       type = "success";
       msg = "Transaction processed / txHash : " + txHash;
     }
+    setDuration(6000);
     setStatus({
       sent: true,
       show: show,
@@ -138,15 +232,18 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
   /**
    * @dev handles the closure of the alert
    */
-  const handleOnClose = () => {
+  const handleOnClose = useCallback(() => {
+    const currentMsg = status.msg;
     setStatus({
       sent: true,
       show: false,
       type: "",
       msg: null,
     });
-    closeTx(data.id);
-  };
+    if (!currentMsg.includes("initialized")) {
+      closeTx(data.id);
+    }
+  }, [closeTx, data.id, status.msg]);
 
   /**
    * @todo : change the way the tx is initialized (rendering issue when strict mode)
@@ -156,6 +253,19 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
       initTransaction();
     }
   }, [status.sent, initTransaction]);
+
+  useEffect(() => {
+    let timer;
+    if (status.show) {
+      timer = setTimeout(() => {
+        handleOnClose();
+      }, duration);
+      // setTimer(timer);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [status.show, handleOnClose]);
 
   return (
     <>
@@ -169,7 +279,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
           {status.msg}
         </Alert>
       ) : null}
-      {/* {show.status ? (
+      {/* {status.show ? (
         <ToastContainer
           className="p-3"
           position={"bottom-start"}
@@ -177,14 +287,15 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
         >
           <Toast
             onClose={handleOnClose}
-            show={show.status}
-            delay={3000}
+            show={status.show}
+            bg={status.type}
+            delay={10000}
             autohide
           >
             <Toast.Header>
               <strong className="me-auto">Bootstrap</strong>
             </Toast.Header>
-            <Toast.Body>{show.msg}</Toast.Body>
+            <Toast.Body>{status.msg}</Toast.Body>
           </Toast>
         </ToastContainer>
       ) : null} */}

@@ -32,6 +32,7 @@ export function TxProvider(props) {
       functionName: "",
       params: null,
       fromAccount: null,
+      callbackObject: null,
     },
   ]);
   /*tx validation state*/
@@ -46,6 +47,8 @@ export function TxProvider(props) {
   const [celebrate, setCelebrate] = useState(null);
   const [saddVoter, setAddVoter] = useState(null);
   const [sworkflow, setWorkflow] = useState(null);
+  const [proposalregistered, setProposalregistered] = useState(null);
+  const [voted, setVoted] = useState(null);
 
   /**
    * @dev stores and triggers new transactions
@@ -54,7 +57,13 @@ export function TxProvider(props) {
    * @param {string} functionName
    * @param {any} params
    */
-  const initTx = (contractInstance, functionName, params, fromAccount) => {
+  const initTx = (
+    contractInstance,
+    functionName,
+    params,
+    fromAccount,
+    callbackObject = null
+  ) => {
     setTxArray((oldArray) => {
       const newArray = [...oldArray];
       newArray.push({
@@ -64,6 +73,7 @@ export function TxProvider(props) {
         functionName: functionName,
         params: params,
         fromAccount: fromAccount,
+        callbackObject: callbackObject,
       });
       return newArray;
     });
@@ -128,6 +138,22 @@ export function TxProvider(props) {
     setWorkflow(null);
   };
 
+  const forwardProposalregistered = (newProposal) => {
+    setProposalregistered(newProposal);
+  };
+
+  const closeProposalregistered = () => {
+    setProposalregistered(null);
+  };
+
+  const forwardVoted = (newVoted) => {
+    setVoted(newVoted);
+  };
+
+  const closeVoted = () => {
+    setVoted(null);
+  };
+
   return (
     <>
       <TxContext.Provider
@@ -143,6 +169,12 @@ export function TxProvider(props) {
           sworkflow,
           setWorkflow,
           closeWorkflow,
+          proposalregistered,
+          setProposalregistered,
+          closeProposalregistered,
+          voted,
+          setVoted,
+          closeVoted,
           alertInvalidTx,
           setAlertInvalidTx,
         }}

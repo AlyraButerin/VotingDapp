@@ -7,18 +7,23 @@ import useConnection from "../ConnectionContext/useConnection";
 /**
  * @dev : install @metamask/detect-provider => npm install @metamask/detect-provider
  * @notice : Provider to manage the vote contract and deployed addresses
+ * @dev : a first loading will init data with abi, bytecode, default deployed add
+ * @dev : after init you can connect to a voteAdd or create a new one
+ * @dev : when choosing a voteAdd, you always need to 'connect to this vote' to load infos and make actions available
  * @param { any } children
  * @return : children wrapped by VoteContext.Provider
+ * @todo : ADD ERR CHECKS AND MANAGEMENT (needed for all providers)
+ * @todo : MAKE IT MORE GENERIC and detach infos
  */
 function VoteProvider({ children }) {
   const { wallet } = useConnection();
   const [voteState, dispatch] = useReducer(reducer, initialState);
 
   /**
-   * @dev : create a new vote contract add it to the voteState, and set 
-   the current contract to the new one
+   * @dev : create a new vote contract add it to the voteState, and set the current contract to the new one
    * @params : none
    * @todo : CHANGE send params, ADD CHECKS
+   * @todo : MOVE TO TXCONTEXT !!!
    */
   const createVote = async () => {
     const { abi, bytecode } = voteState;
@@ -35,29 +40,6 @@ function VoteProvider({ children }) {
       });
     const address = newContractInstance.options.address;
 
-    /*
-     *
-     *
-     * MODIF CODE ICI
-     * test voter
-     *
-     */
-    // await newContractInstance.methods
-    //   .addVoter(wallet.accounts[0])
-    //   .send({ from: wallet.accounts[0] });
-    // const getVoter = await newContractInstance.methods
-    //   .getVoter(wallet.accounts[0])
-    //   .call({ from: wallet.accounts[0] });
-    // console.log("RENVOI STRUCT ICI/n/n!!!!!!!isVoter", getVoter);
-    // let isVoter = getVoter.isRegistered;
-    /*
-     *
-     *
-     * MODIF CODE ICI
-     *
-     *
-     */
-
     dispatch({
       type: actions.addNewVote,
       data: {
@@ -71,74 +53,104 @@ function VoteProvider({ children }) {
   };
 
   /**
+   * @dev : get infos from the contract regarding the current user
+   * @dev : return values are null if there's a pb during the call
+   * @param { object } contract
+   * @return : { isAdmin, isVoter, workflowIndex }
+   */
+  const getContractInfos = async (contract) => {
+    /*at the moment : null/ture/false, if null pb when fetching the info*/
+    let isAdmin, isVoter, workflowIndex;
+    await contract.methods
+      .owner()
+      .call({ from: wallet.accounts[0] })
+      .then((result) => {
+        isAdmin = result.toLowerCase() === wallet.accounts[0];
+      });
+    try {
+      const result = await contract.methods
+        .getVoter(wallet.accounts[0])
+        .call({ from: wallet.accounts[0] });
+      isVoter = result.isRegistered;
+    } catch (err) {
+      console.log(
+        "(VoteProvider)/getInfos : voter : reverted => not registered"
+      ); // console.err("(VoteProvider)/getInfos : voter",err);
+    }
+    await contract
+      .getPastEvents("WorkflowStatusChange", {
+        fromBlock: 0,
+        toBlock: "latest",
+      })
+      .then(function (events) {
+        workflowIndex = 0;
+        if (events.length > 0) {
+          const lastEvent = events[events.length - 1];
+          workflowIndex = lastEvent.returnValues.newStatus;
+        }
+      });
+
+    console.log(
+      "(VoteProvider)/getContractInfos : ",
+      isAdmin,
+      isVoter,
+      workflowIndex
+    );
+
+    return { isAdmin, isVoter, workflowIndex };
+  };
+
+  const updateContractInfos = async (contract) => {
+    const infos = await getContractInfos(contract);
+    dispatch({
+      type: actions.updateVote,
+      data: {
+        isAdmin: infos.isAdmin,
+        isVoter: infos.isVoter,
+        workflowIndex: infos.workflowIndex,
+      },
+    });
+    console.log("UPDAT VOTE CALLED VOTE PROVIFER msg");
+  };
+
+  /**
+   * @notice : ALWAYS NEED TO CONNECT TO A VOTE CONTRACT BEFORE DOING ANYTHING
    * @dev : connect to an existing vote contract and set the current contract to the new one
    * @param { string } addressToConnect
+   *
+   * @todo : TEST with testnet ??> also first add in network since migrate
    */
   const connectToVote = async (addressToConnect) => {
     if (addressToConnect) {
       const { abi, web3 } = voteState;
-      let contract, isAdmin, isVoter, admin;
-      //truffle ok mais testnet ??> aussi premiere add ds network vu que migrate
+      let contract, isAdmin, isVoter, workflowIndex;
+
       try {
         contract = new web3.eth.Contract(abi, addressToConnect);
 
-        /*
-         *
-         *
-         * MODIF CODE ICI
-         *
-         *
-         */
-
-        admin = await contract.methods
-          .owner()
-          .call({ from: wallet.accounts[0] });
-        isAdmin = admin.toLowerCase() === wallet.accounts[0];
-        console.log(
-          "(VoteProvider)/connect to vote admin / acc0 : ",
-          admin.toLowerCase(),
-          wallet.accounts[0]
-        );
-        // isAdmin = admin == wallet.accounts[0];
-        console.log("(VoteProvider)/connect to vote isAdmin : ", isAdmin);
-        // isVoter = await contract.methods
-        //   .getVoter(wallet.accounts[0])
-        //   .call({ from: wallet.accounts[0] });
-
-        //add better way : look nearer block / block of contract creation ?
-        contract
-          .getPastEvents("VoterRegistered", {
-            // filter: { voterAddress: wallet.accounts[0] },
-            fromBlock: 0,
-            toBlock: "latest",
-          })
-          .then((events) => {
-            console.log("EVENTS", events);
-            isVoter = events.length > 0;
-            console.log("(VoteProvider)/connect to vote isVoter : ", isVoter);
-          })
-          .catch((err) => console.error(err));
-
-        /*
-         *
-         *
-         * MODIF CODE ICI
-         *
-         *
-         */
+        const infos = await getContractInfos(contract);
+        isAdmin = infos.isAdmin;
+        isVoter = infos.isVoter;
+        workflowIndex = infos.workflowIndex;
       } catch (err) {
         console.error(err);
       }
-      console.log("(VoteProvider)/connect to vote : ", contract);
+      console.log(
+        "(VoteProvider)/ConnectToVot infos loaded : c,a,v,w:",
+        contract,
+        isAdmin,
+        isVoter,
+        workflowIndex
+      );
       dispatch({
         type: actions.loadVote,
         data: {
           contract,
           isAdmin,
           isVoter,
+          workflowIndex,
         },
       });
-      console.log("(VoteProvider)/connect to vote : ", voteState);
     }
   };
 
@@ -211,6 +223,7 @@ function VoteProvider({ children }) {
       value={{
         createVote,
         connectToVote,
+        updateContractInfos,
         voteState,
         dispatch,
       }}

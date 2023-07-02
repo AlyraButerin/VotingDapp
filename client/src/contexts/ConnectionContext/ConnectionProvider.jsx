@@ -107,8 +107,14 @@ const ConnectionProvider = ({ children }) => {
     console.log("wallet handleConnect", wallet);
   };
 
+  const handleDisconnect = async () => {
+    setWallet(initialState);
+  };
+
   return (
-    <ConnectionContext.Provider value={{ wallet, hasProvider, handleConnect }}>
+    <ConnectionContext.Provider
+      value={{ wallet, hasProvider, handleConnect, handleDisconnect }}
+    >
       {children}
     </ConnectionContext.Provider>
   );

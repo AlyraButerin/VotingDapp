@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 //import "./styles.css";
 
-//TODO : reput React.StrictMode => error with txmanager rerendering initTx
+//TODO : uncomment React.StrictMode => error with txmanager rerendering initTx
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
