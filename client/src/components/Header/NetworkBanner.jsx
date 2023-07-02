@@ -1,5 +1,10 @@
 import useConnection from "../../contexts/ConnectionContext/useConnection";
 import { chainIdToName, toShortAddress } from "../../utils/connectionUtils";
+
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+
+
 /*
 @dev : display the wallet accounts and the network chainId
 @todo : DEMO VERSION ADD ELEMENTS, REFACTORING
@@ -7,16 +12,25 @@ import { chainIdToName, toShortAddress } from "../../utils/connectionUtils";
 function NetworkBanner() {
   const { wallet, hasProvider, handleConnect } = useConnection();
   return (
-    <div
-      className="NetworkBanner"
-      style={{ display: "flex", flexDirection: "row" }}
-    >
-      <label>Wallet Accounts: {toShortAddress(wallet?.accounts[0])}</label>
 
-      <h5 style={{ display: "inline" }}>Network Banner</h5>
 
-      <label>Hex ChainId: {chainIdToName(wallet?.chainId)}</label>
-    </div>
+    <Navbar className="bg-light">  
+      <Container>
+      <Navbar.Collapse className="justify-content-left">
+          <Navbar.Text>
+          Wallet Account: {toShortAddress(wallet?.accounts[0])}
+          </Navbar.Text>
+        </Navbar.Collapse>
+        
+        
+        <Navbar.Collapse className="justify-content-end">
+          <Navbar.Text>
+            Chain Id: {chainIdToName(wallet?.chainId)}
+          </Navbar.Text>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+
   );
 }
 

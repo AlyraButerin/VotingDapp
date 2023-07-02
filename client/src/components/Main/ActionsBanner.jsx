@@ -26,10 +26,6 @@ function ActionsBanner({ setIsVoteTallied }) {
         )}
         {voteState.isVoter ? <VoterActions /> : <div>Not Voter</div>}
       </>
-      <center>
-        <h5>Actions Banner</h5>
-      </center>
-      <button onClick={handleCreateVote}>Create New Vote</button>
     </div>
   );
 }

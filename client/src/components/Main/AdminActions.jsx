@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
-import useVote from "../../contexts/VoteContext/useVote";
-import useConnection from "../../contexts/ConnectionContext/useConnection";
-import TxContext from "../../contexts/TxContext/TxContext";
+import useVote from '../../contexts/VoteContext/useVote';
+import useConnection from '../../contexts/ConnectionContext/useConnection';
+import TxContext from '../../contexts/TxContext/TxContext';
 import { useContext } from "react";
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
+import Navbar from 'react-bootstrap/Navbar';
+import Button  from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 function AdminActions({ setIsVoteTallied }) {
   const { initTx, subscribeEvent, addVoter, closeAddVoter } =
@@ -112,6 +119,7 @@ function AdminActions({ setIsVoteTallied }) {
     getWhiteList();
   }, [voteState.contract]);
 
+
   useEffect(() => {
     const newDisabledButton = [true, true, true, true];
     newDisabledButton[voteState.workflowIndex] = false;
@@ -119,8 +127,8 @@ function AdminActions({ setIsVoteTallied }) {
     console.log("useEffect index", voteState.workflowIndex);
   }, [voteState.workflowIndex]);
 
-  return (
-    <div>
+  return ( 
+    <div className="bg-body-tertiary">
       AdminActions
       <div>
         <select>
@@ -144,6 +152,7 @@ function AdminActions({ setIsVoteTallied }) {
         <button onClick={handleStartProposal} disabled={disabledButton[0]}>
           start proposal registration
         </button>
+
         <button onClick={handleEndProposal} disabled={disabledButton[1]}>
           End proposal registration
         </button>
@@ -153,8 +162,10 @@ function AdminActions({ setIsVoteTallied }) {
         <button onClick={handleEndVoting} disabled={disabledButton[3]}>
           End voting session
         </button>
+
       </div>
     </div>
+         
   );
 }
 
