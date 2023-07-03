@@ -2,6 +2,10 @@
 
 ## Vercel Link:
 https://voting-dapp-gamma.vercel.app/
+
+## Project Board on Github:
+https://github.com/orgs/AlyraButerin/projects/1/views/1
+
 ## Demo Link:
 https://www.loom.com/share/9830e8cb2cb04cacb1adb798b0d15410
 
