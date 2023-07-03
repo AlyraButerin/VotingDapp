@@ -2,6 +2,7 @@ import React, { useState, useLayoutEffect, useEffect, useContext } from "react";
 import useVote from "../../contexts/VoteContext/useVote";
 import TxContext from "../../contexts/TxContext/TxContext";
 import useConnection from "../../contexts/ConnectionContext/useConnection";
+import Button from "react-bootstrap/Button";
 
 function VoterActions() {
   const { initTx, subscribeEvent, addVoter, closeAddVoter } =
@@ -87,9 +88,9 @@ function VoterActions() {
           onChange={handleVoteChange}
         />
 
-        <button onClick={handleSetVote} disabled={disabledButton[1]}>
+        <Button onClick={handleSetVote} disabled={disabledButton[1]}>
           Vote
-        </button>
+        </Button>
       </div>
     </>
   );
