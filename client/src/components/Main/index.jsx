@@ -4,6 +4,7 @@ import ActionsBanner from "./ActionsBanner";
 import ResultsBanner from "./ResultsBanner";
 import useVote from "../../contexts/VoteContext/useVote";
 import useConnection from "../../contexts/ConnectionContext/useConnection";
+import { Button } from "react-bootstrap";
 // import AddressList from "./AddressList";
 
 /*
