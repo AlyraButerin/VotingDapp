@@ -10,6 +10,7 @@ import Alert from "react-bootstrap/Alert";
  * - 2 states : succes /error
  *
  * @param {any} props
+ * @todo : REFACTOR : close the alert is messy => manager and context => not good
  */
 export default function EventManager(props) {
   const [data, setData] = useState();
@@ -26,50 +27,7 @@ export default function EventManager(props) {
    * - as they're no unsubcription, handles it by testing  type === ""
    * - if the event result is needed callback exists
    */
-  const handleEventB = useCallback(
-    function (error, event) {
-      let type = show.type;
-      let data = show.data;
-
-      if (show.type === "") {
-        if (error) {
-          type = "danger";
-          data = error;
-
-          console.log("EVENTMANAGER/ error", error);
-        } else {
-          type = "success";
-          data = event.returnValues;
-          setDuration(5000);
-          /*the event was initiated to forward its result*/
-          // if (props.data.callback) {
-          // if()
-          //   props.forwardCelebration({
-          //     id: data.kittenId,
-          //     mumId: data.mumId,
-          //     dadId: data.dadId,
-          //     genes: data.genes,
-          //     birthTime: data.birthTime,
-          //     generation: data.generation,
-          //     owner: data.owner,
-          //   });
-          console.log("EVENTMANAGER/ data", data);
-          props.forwardAddVoter({
-            voterAddress: data.voterAddress,
-          });
-          // }
-        }
-      }
-      setShow({
-        status: true,
-        type: type,
-        data: data,
-      });
-    },
-    [show.type, show.data, props]
-  );
-
-  const handleEventVR = useCallback(
+  const handleEventResult = useCallback(
     function (error, event) {
       let type = show.type;
       let data = show.data;
@@ -82,14 +40,8 @@ export default function EventManager(props) {
           type = "success";
           data = event.returnValues;
           setDuration(5000);
-          /*the event was initiated to forward its result*/
-          // if (props.data.callback) {
-          // if()
 
-          props.forwardAddVoter({
-            voterAddress: data.voterAddress,
-          });
-          // }
+          props.forwardEventResult(data);
         }
       }
       setShow({
@@ -101,117 +53,6 @@ export default function EventManager(props) {
     [show.type, show.data, props]
   );
 
-  const handleEventPR = useCallback(
-    function (error, event) {
-      let type = show.type;
-      let data = show.data;
-
-      if (show.type === "") {
-        if (error) {
-          type = "danger";
-          data = error;
-        } else {
-          type = "success";
-          data = event.returnValues;
-          setDuration(5000);
-          /*the event was initiated to forward its result*/
-          // if (props.data.callback) {
-          // if()
-
-          props.forwardProposalregistered({
-            proposalId: data.proposalId,
-          });
-          // }
-        }
-      }
-      setShow({
-        status: true,
-        type: type,
-        data: data,
-      });
-    },
-    [show.type, show.data, props]
-  );
-
-  const handleEventSP = useCallback(
-    function (error, event) {
-      let type = show.type;
-      let data = show.data;
-      console.log("EVENTMANAGER/ handleEventSP", error, event);
-      if (show.type === "") {
-        if (error) {
-          type = "danger";
-          data = error;
-          console.log("EVENTMANAGER/ error", error);
-        } else {
-          type = "success";
-          data = event.returnValues;
-          setDuration(5000);
-          /*the event was initiated to forward its result*/
-          // if (props.data.callback) {
-          // if()
-          console.log("EVENTMANAGER/ data", data);
-
-          props.forwardWorkflow({
-            previousStatus: data.previousStatus.toString(),
-            newStatus: data.newStatus, //si BN
-          });
-          // }
-        }
-      }
-      setShow({
-        status: true,
-        type: type,
-        data: data,
-      });
-    },
-    [show.type, show.data, props]
-  );
-
-  const handleEventV = useCallback(
-    function (error, event) {
-      let type = show.type;
-      let data = show.data;
-
-      if (show.type === "") {
-        if (error) {
-          type = "danger";
-          data = error;
-        } else {
-          type = "success";
-          data = event.returnValues;
-          setDuration(5000);
-          /*the event was initiated to forward its result*/
-          // if (props.data.callback) {
-          // if()
-
-          props.forwardVoted({
-            voter: data.voter,
-            proposalId: data.proposalId,
-          });
-          // }
-        }
-      }
-      setShow({
-        status: true,
-        type: type,
-        data: data,
-      });
-    },
-    [show.type, show.data, props]
-  );
-
-  /**
-   * handles the closure of the alert
-   */
-  // const handleOnClose = () => {
-  //   setShow({
-  //     status: false,
-  //     type: "",
-  //     data: null,
-  //   });
-  // };
-  ///ICICI
   const handleOnClose = useCallback(() => {
     setShow({
       status: false,
@@ -219,6 +60,7 @@ export default function EventManager(props) {
       data: null,
     });
   }, []);
+
   /**
    * initializes a new event listener
    *
@@ -231,32 +73,29 @@ export default function EventManager(props) {
       setData(props.data);
 
       switch (props.data.name) {
-        case "Birth":
-          props.data.instance.events.Birth(handleEventB);
-          break;
         case "VoterRegistered":
-          props.data.instance.events.VoterRegistered(handleEventVR);
+          props.data.instance.events.VoterRegistered(handleEventResult);
           console.log(
             "EVENTMANAGER/ VoterRegistered",
             props.data.instance.events.VoterRegistered
           );
           break;
         case "WorkflowStatusChange":
-          props.data.instance.events.WorkflowStatusChange(handleEventSP);
+          props.data.instance.events.WorkflowStatusChange(handleEventResult);
           console.log(
             "EVENTMANAGER/ WorkflowStatusChange",
             props.data.instance.events.WorkflowStatusChange
           );
           break;
         case "ProposalRegistered":
-          props.data.instance.events.ProposalRegistered(handleEventPR);
+          props.data.instance.events.ProposalRegistered(handleEventResult);
           console.log(
             "EVENTMANAGER/ ProposalRegistered",
             props.data.instance.events.ProposalRegistered
           );
           break;
         case "Voted":
-          props.data.instance.events.Voted(handleEventV);
+          props.data.instance.events.Voted(handleEventResult);
           console.log("EVENTMANAGER/ Voted", props.data.instance.events.Voted);
           break;
         default:
@@ -269,14 +108,7 @@ export default function EventManager(props) {
         msg: "event initalized",
       });
     },
-    [
-      props.data,
-      handleEventB,
-      handleEventVR,
-      handleEventSP,
-      handleEventPR,
-      handleEventV,
-    ]
+    [props.data, handleEventResult]
   );
 
   /**
@@ -288,30 +120,19 @@ export default function EventManager(props) {
     let content = "";
 
     if (show.type === "success") {
+      const baseContent = (
+        <>
+          <p>
+            <b>{props.data.name}</b> <i>Its information :</i>
+          </p>
+          <hr />
+        </>
+      );
+      let details;
       switch (props.data.name) {
-        case "Birth":
-          content = (
-            <>
-              <p>
-                <b>{`Your new kitten from generation ${show.data.generation} is born!`}</b>{" "}
-                <i>Its information :</i>
-              </p>
-              <hr />
-              <p>
-                <b> {`Id : ${show.data.kittenId}`}</b>
-                {` - mum Id : ${show.data.mumId} - dad Id : ${show.data.dadId} 
-                            - genes : ${show.data.genes} - owner : ${show.data.owner}`}
-              </p>
-            </>
-          );
-          break;
         case "VoterRegistered":
-          content = (
+          details = (
             <>
-              <p>
-                <b>{`New voter registered!`}</b> <i>Its information :</i>
-              </p>
-              <hr />
               <p>
                 <b> {`Address : ${show.data.voterAddress}`}</b>
               </p>
@@ -319,16 +140,36 @@ export default function EventManager(props) {
           );
           break;
         case "WorkflowStatusChange":
-          content = (
+          details = (
             <>
               <p>
-                <b>{`Workflow status changed!`}</b> <i>Its information :</i>
-              </p>
-              <hr />
-              <p>
+                {" "}
                 <b>
                   {" "}
-                  {`Previous status : ${show.data.previousStatus} - New status : ${show.data.newStatus}`}
+                  {`Previous status : ${show.data.previousStatus} - New status : ${show.data.newStatus}`}{" "}
+                </b>
+              </p>
+            </>
+          );
+          break;
+        case "ProposalRegistered":
+          details = (
+            <>
+              <p>
+                {" "}
+                <b> {`ID of registered proposal : ${show.data.proposalId}`} </b>
+              </p>
+            </>
+          );
+          break;
+        case "Voted":
+          details = (
+            <>
+              <p>
+                {" "}
+                <b>
+                  {" "}
+                  {`Voter : ${show.data.voter} - vote for ID : ${show.data.proposalId}`}{" "}
                 </b>
               </p>
             </>
@@ -337,6 +178,12 @@ export default function EventManager(props) {
         default:
           break;
       }
+      content = (
+        <>
+          {baseContent}
+          {details}
+        </>
+      );
     } else if (show.type === "danger") {
       content = (
         <>
@@ -353,25 +200,22 @@ export default function EventManager(props) {
   };
 
   useLayoutEffect(() => {
-    if (!data) {
-      //(data !== props.data) {
+    if (data !== props.data) {
       initSubscription();
     }
   }, [props.data, data, initSubscription]);
 
-  //ICICICICI
   useLayoutEffect(() => {
     let timer;
     if (show.status) {
       timer = setTimeout(() => {
         handleOnClose();
       }, duration);
-      // setTimer(timer);
     }
     return () => {
       clearTimeout(timer);
     };
-  }, [show.status, handleOnClose]);
+  }, [show.status, handleOnClose, duration]);
 
   return (
     <>

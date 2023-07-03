@@ -50,7 +50,7 @@ const resetSate = {
 */
 const reducer = (voteState, action) => {
   const { type, data } = action;
-  let nextData = {};
+  // let nextData = {};
   switch (type) {
     case actions.init:
       return { ...voteState, ...data };
@@ -65,14 +65,14 @@ const reducer = (voteState, action) => {
       const contract = data.contract;
       const isAdmin = true; //RETIRER / POUR TEST
       const isVoter = data.isVoter; //RETIRER / POUR TEST
-      const nexData = {
+      const addData = {
         deployedAddresses,
         contractAddressIndex,
         contract,
         // isAdmin,
         // isVoter, //RETIRER / POUR TEST
       };
-      return { ...voteState, ...nexData };
+      return { ...voteState, ...addData };
     }
     case actions.loadVote:
       const contract = data.contract;
@@ -82,24 +82,24 @@ const reducer = (voteState, action) => {
       const isAdmin = data.isAdmin;
       const isVoter = data.isVoter;
       const workflowIndex = data.workflowIndex;
-      const nexData = {
+      const loadData = {
         contractAddressIndex,
         contract,
         isAdmin,
         isVoter,
         workflowIndex,
       };
-      return { ...voteState, ...nexData };
+      return { ...voteState, ...loadData };
     case actions.updateVote:
       // const isAdmin = data.isAdmin;
       // const isVoter = data.isVoter;
       // const workflowIndex = data.workflowIndex;
-      nextData = {
+      const freshData = {
         isAdmin: data.isAdmin,
         isVoter: data.isVoter,
         workflowIndex: data.workflowIndex,
       };
-      return { ...voteState, ...nextData };
+      return { ...voteState, ...freshData };
 
     default:
       throw new Error("Undefined reducer action type");

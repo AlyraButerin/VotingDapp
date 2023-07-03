@@ -26,12 +26,18 @@ function Main() {
     voteCount: null,
   });
 
-  /*
-  @dev :  handleSelectVote
-  */
+  /**
+   * @dev :  handleSelectVote
+   * @todo : dirty fix for default add not loading => manage the first state of select!!!!
+   */
   const handleSelectVote = () => {
     console.log("handleSelectVote", select);
-    connectToVote(select);
+    console.log("handleSelectVote", voteState.deployedAddresses);
+    if (select === null && voteState.deployedAddresses.length > 0) {
+      connectToVote(voteState.deployedAddresses[0]);
+    } else {
+      connectToVote(select);
+    }
   };
 
   const getWinningProposal = async () => {
@@ -59,12 +65,12 @@ function Main() {
     }
   }, [voteState.deployedAddresses]);
 
-  /*
-  @todo : REMOVE AT THE END
-  */
-  const afficheVote = () => {
-    console.log("(index/Main)/voteState", voteState);
-  };
+  // /*
+  // @todo : REMOVE AT THE END
+  // */
+  // const afficheVote = () => {
+  //   console.log("(index/Main)/voteState", voteState);
+  // };
 
   /*
   @dev : watcher on voteState changes
@@ -100,7 +106,7 @@ function Main() {
               {/* @todo : TEMPORARY CODE, USE A NEW COMPONENT INSTEAD */}
               <label>
                 DeployedAddess:
-                <select
+                {/* <select
                   onChange={(e) => {
                     const address = voteState.deployedAddresses.find(
                       (address) => address === e.target.value
@@ -110,6 +116,22 @@ function Main() {
                 >
                   {voteState?.deployedAddresses.length > 0
                     ? voteState?.deployedAddresses.map((address, index) => (
+                        <option key={index} value={address}>
+                          {address}
+                        </option>
+                      ))
+                    : null}
+                </select> */}
+                <select
+                  onChange={(e) => {
+                    const address = deployedAddresses.find(
+                      (address) => address === e.target.value
+                    );
+                    setSelect(address);
+                  }}
+                >
+                  {deployedAddresses.length > 0
+                    ? deployedAddresses.map((address, index) => (
                         <option key={index} value={address}>
                           {address}
                         </option>
