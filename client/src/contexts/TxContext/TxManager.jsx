@@ -65,7 +65,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
   };
   /**
    * initializes a tx following the desired function call
-   * @dev : be sure to set the correct function name and event
+   * @dev : be sure to set the correct function name and event // WRITE functions
    * @todo : change the way the tx is initialized
    * @todo : externalize send func.. to have a generic tx manager
    */
@@ -151,6 +151,7 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
               setAlertInvalidTx("Invalid Tx: voting rejected");
             });
           break;
+
         default:
           break;
       }
@@ -279,26 +280,6 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
           {status.msg}
         </Alert>
       ) : null}
-      {/* {status.show ? (
-        <ToastContainer
-          className="p-3"
-          position={"bottom-start"}
-          style={{ zIndex: 1 }}
-        >
-          <Toast
-            onClose={handleOnClose}
-            show={status.show}
-            bg={status.type}
-            delay={10000}
-            autohide
-          >
-            <Toast.Header>
-              <strong className="me-auto">Bootstrap</strong>
-            </Toast.Header>
-            <Toast.Body>{status.msg}</Toast.Body>
-          </Toast>
-        </ToastContainer>
-      ) : null} */}
     </>
   );
 }
