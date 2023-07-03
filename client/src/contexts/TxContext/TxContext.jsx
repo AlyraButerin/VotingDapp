@@ -21,6 +21,7 @@ const TxContext = createContext();
  *
  * @todo : remove closed Tx from the array via txManager (Attention : manage id a different way)
  * @todo : refactor setInvalidTx
+ * @todo : refactor eventManager (close form context or manager) =>forward info no more util ..
  */
 export function TxProvider(props) {
   /*array of transactions*/
@@ -43,12 +44,8 @@ export function TxProvider(props) {
     instance: null,
     name: "",
   });
-  /*resutl of event to forward (only breeding at the moment)*/
-  const [celebrate, setCelebrate] = useState(null);
-  const [saddVoter, setAddVoter] = useState(null);
-  const [sworkflow, setWorkflow] = useState(null);
-  const [proposalregistered, setProposalregistered] = useState(null);
-  const [voted, setVoted] = useState(null);
+  /*resutl of event to forward */
+  const [test, setTest] = useState(null);
 
   /**
    * @dev stores and triggers new transactions
@@ -64,6 +61,11 @@ export function TxProvider(props) {
     fromAccount,
     callbackObject = null
   ) => {
+    console.log(
+      "intiTX /n CHECK LE PB DE 1ere tx et 1er contract/NICI/NICI/ICI/NICI/nICI/nICI/n/n",
+      functionName,
+      contractInstance
+    );
     setTxArray((oldArray) => {
       const newArray = [...oldArray];
       newArray.push({
@@ -112,46 +114,14 @@ export function TxProvider(props) {
   /**
    * manage the result of a birth by breeding (forward/close)
    *
-   * @param {*} newKitty
+   * @param {*} event data received
    */
-  const forwardCelebration = (newKitty) => {
-    setCelebrate(newKitty);
+  const forwardEventResult = (eventData) => {
+    setTest(eventData);
   };
 
-  const closeCelebration = () => {
-    setCelebrate(null);
-  };
-
-  const forwardAddVoter = (newVoter) => {
-    setAddVoter(newVoter);
-  };
-
-  const closeAddVoter = () => {
-    setAddVoter(null);
-  };
-
-  const forwardWorkflow = ({ previousStatus, newStatus }) => {
-    setWorkflow({ previousStatus, newStatus });
-  };
-
-  const closeWorkflow = () => {
-    setWorkflow(null);
-  };
-
-  const forwardProposalregistered = (newProposal) => {
-    setProposalregistered(newProposal);
-  };
-
-  const closeProposalregistered = () => {
-    setProposalregistered(null);
-  };
-
-  const forwardVoted = (newVoted) => {
-    setVoted(newVoted);
-  };
-
-  const closeVoted = () => {
-    setVoted(null);
+  const closeEventResult = () => {
+    setTest(null);
   };
 
   return (
@@ -160,21 +130,10 @@ export function TxProvider(props) {
         value={{
           initTx,
           subscribeEvent,
-          celebrate,
-          setCelebrate,
-          closeCelebration,
-          saddVoter,
-          setAddVoter,
-          closeAddVoter,
-          sworkflow,
-          setWorkflow,
-          closeWorkflow,
-          proposalregistered,
-          setProposalregistered,
-          closeProposalregistered,
-          voted,
-          setVoted,
-          closeVoted,
+          // test,
+          // setTest,
+          // forwardEventResult,
+          // closeEventResult,
           alertInvalidTx,
           setAlertInvalidTx,
         }}
@@ -207,9 +166,7 @@ export function TxProvider(props) {
             {event.processing ? (
               <EventManager
                 data={event}
-                forwardCelebration={forwardCelebration}
-                forwardAddVoter={forwardAddVoter}
-                forwardWorkflow={forwardWorkflow}
+                forwardEventResult={forwardEventResult}
                 style={{ fontSize: "0.2em" }}
               ></EventManager>
             ) : null}
