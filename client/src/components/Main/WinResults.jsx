@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 
+
 function WinResults({ getWinningProposal, winningProposal }) {
   const [winnerToDisplay, setWinnerToDisplay] = useState(null);
 
@@ -25,6 +26,7 @@ function WinResults({ getWinningProposal, winningProposal }) {
         </div>
       ) : null}
     </Container>
+
   );
 }
 

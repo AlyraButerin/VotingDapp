@@ -3,6 +3,7 @@ import { chainIdToName, toShortAddress } from "../../utils/connectionUtils";
 
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
+import Button from "react-bootstrap/Button";
 
 
 /*
@@ -10,11 +11,13 @@ import Navbar from 'react-bootstrap/Navbar';
 @todo : DEMO VERSION ADD ELEMENTS, REFACTORING
 */
 function NetworkBanner() {
-  const { wallet, hasProvider, handleConnect } = useConnection();
+  const { wallet, hasProvider, handleConnect, handleDisconnect } = useConnection();
+
+  
   return (
 
 
-    <Navbar className="bg-light">  
+    <Navbar style = {{backgroundColor: "#3286aa", color:"white"}}>   
       <Container>
       <Navbar.Collapse className="justify-content-left">
           <Navbar.Text>
@@ -22,6 +25,10 @@ function NetworkBanner() {
           </Navbar.Text>
         </Navbar.Collapse>
         
+
+        <Navbar.Collapse className="justify-content-center">
+        <Button onClick={handleDisconnect} variant="danger">Disconnect/return</Button>
+        </Navbar.Collapse>
         
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>

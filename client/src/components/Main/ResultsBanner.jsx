@@ -1,4 +1,5 @@
 import React from "react";
+
 import { useContext, useEffect, useState } from "react";
 import useVote from "../../contexts/VoteContext/useVote";
 import Container from "react-bootstrap/esm/Container";
@@ -20,6 +21,7 @@ import useConnection from "../../contexts/ConnectionContext/useConnection";
  */
 function ResultsBanner({ getWinningProposal, winningProposal }) {
   const [winnerToDisplay, setWinnerToDisplay] = useState(null);
+
   const { voteState, connectToVote } = useVote();
   const { wallet } = useConnection();
   const [askedProposalId, setAskedProposalId] = useState("");
@@ -34,6 +36,7 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
     description: null,
     voteCount: null,
   });
+
 
   const updateWinnerData = async () => {
     console.log("updateWinnerData", winnerProposal);
@@ -102,6 +105,7 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
   return (
     <Container>
       <Row xs={1} md={2}>
+
         <Col>
           <>
             {voteState.isAdmin ? <Whitelist /> : <div></div>}
@@ -147,6 +151,7 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
           <p>Vote Count: {askedProposal.voteCount}</p>
         </Col>
       </Row>
+
     </Container>
   );
 }

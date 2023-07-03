@@ -30,6 +30,7 @@ function StatusBanner() {
       <Container>
         <Navbar.Collapse className="justify-content-left">
           <Navbar.Text>Connected to Vote : {getVoteAddress()}</Navbar.Text>
+
         </Navbar.Collapse>
 
         <Navbar.Collapse className="justify-content-end">
