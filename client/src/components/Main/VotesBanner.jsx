@@ -10,7 +10,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/esm/Container";
 
-
 function VotesBanner() {
   const { wallet, hasProvider, handleConnect, handleDisconnect } =
     useConnection();
@@ -58,12 +57,9 @@ function VotesBanner() {
   }, [voteState.deployedAddresses]);
 
   return (
-<Container className= "flex" style = {{paddig: "60px"}}>
-      <Row xs={1} md={5}>
-      <Col>
-        
-        </Col>
-        <Col>
+    <Navbar className="bg-body-tertiary">
+      <Stack direction="horizontal" gap={5}>
+        <Navbar.Text>Select a vote</Navbar.Text>
         <Form.Select
           onChange={(e) => {
             const address = deployedAddresses.find(
@@ -81,19 +77,14 @@ function VotesBanner() {
               ))
             : null}
         </Form.Select>
-        </Col>
-        <Col>
-        
         <Button onClick={handleSelectVote} variant="primary">
           Connecter
         </Button>
-        </Col>
-   <Col>
-        <h5>
+
+        <div className="vr" />
+        <Navbar.Text className="justify-content-end">
           Create a new vote
-        </h5>
-        </Col>
-        <Col>
+        </Navbar.Text>
         <Button
           onClick={handleCreateVote}
           className="justify-content-end"
@@ -101,7 +92,6 @@ function VotesBanner() {
         >
           Deploy
         </Button>
-
 
         <div className="vr" />
         <Navbar.Text className="justify-content-end">Disconnect</Navbar.Text>
@@ -115,10 +105,6 @@ function VotesBanner() {
         {/* <button onClick={handleSelectVote}>Connect to Vote</button> */}
       </Stack>
     </Navbar>
-
-        </Col>
-   </Row>
-        </Container>
   );
 }
 
