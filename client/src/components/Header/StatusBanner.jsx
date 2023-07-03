@@ -1,32 +1,29 @@
 import useVote from "../../contexts/VoteContext/useVote";
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
+import Form from "react-bootstrap/Form";
 
 function StatusBanner() {
   const { voteState } = useVote();
     return (
-      <Navbar style = {{backgroundColor: "#91bbd1", color:"white"}}>
+      <Navbar style = {{backgroundColor: "#91bbd1"}}>
       <Container>
       <Navbar.Collapse className="justify-content-left">
           
-
           {voteState?.deployedAddresses.length > 0 ?
           voteState?.deployedAddresses.map((address, index) => (
-            <Navbar.Text value={address}>
+            <Form.Label value={address}>
               {"You are connected to Vote : " + address}
-              </Navbar.Text>
+              </Form.Label>
           ))
-
-           
-      
-          
+    
            : <div></div>}
         </Navbar.Collapse>
 
         <Navbar.Collapse className="justify-content-end">
-          <Navbar.Text>
+        <Form.Label>
           Vote Status: 
-          </Navbar.Text>
+          </Form.Label>
         </Navbar.Collapse>
         
         

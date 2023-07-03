@@ -1,6 +1,7 @@
 import useVote from "../../contexts/VoteContext/useVote";
 import AdminActions from "./AdminActions";
 import VoterActions from "./VoterActions";
+import Container from "react-bootstrap/Container";
 /*
 @dev :  <ActionsBanner /> is a component of <Main />.
 will be used to manage all actions
@@ -17,7 +18,7 @@ function ActionsBanner({ setIsVoteTallied }) {
   };
 
   return (
-    <div className="ActionsBannerBanner">
+    <Container style = {{backgroundColor: "#91bbd1"}}>
       <>
         {voteState.isAdmin ? (
           <AdminActions setIsVoteTallied={setIsVoteTallied} />
@@ -26,7 +27,7 @@ function ActionsBanner({ setIsVoteTallied }) {
         )}
         {voteState.isVoter ? <VoterActions /> : <div>Not Voter</div>}
       </>
-    </div>
+    </Container>
   );
 }
 

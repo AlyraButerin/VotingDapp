@@ -3,11 +3,9 @@ import { useEffect, useState } from "react";
 import useVote from "../../contexts/VoteContext/useVote";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Stack from "react-bootstrap/Stack";
-import Navbar from "react-bootstrap/Navbar";
-import Row from 'react-bootstrap/Row';
+import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Container from 'react-bootstrap/esm/Container';
+import Container from "react-bootstrap/esm/Container";
 
 function VotesBanner() {
   const { voteState, connectToVote, createVote } = useVote();
@@ -16,7 +14,12 @@ function VotesBanner() {
 
   const handleSelectVote = () => {
     console.log("handleSelectVote", select);
-    connectToVote(select);
+    console.log("handleSelectVote", voteState.deployedAddresses);
+    if (select === null && voteState.deployedAddresses.length > 0) {
+      connectToVote(voteState.deployedAddresses[0]);
+    } else {
+      connectToVote(select);
+    }
   };
 
   const handleCreateVote = async () => {
@@ -35,53 +38,52 @@ function VotesBanner() {
   };
 
   return (
-<Container className= "flex" style = {{paddig: "60px"}}>
-      <Row xs={1} md={5}>
-      <Col>
-        
+    <Container className="container-fluid p-0" style={{ paddingTop: "60px", height: "70px" }}>
+      <br/>
+      <Row xs={12} md={8}>
+        <Col>
+        <Form.Label>Votes Deployed : </Form.Label>
         </Col>
         <Col>
-        <Form.Select
-          onChange={(e) => {
-            const address = voteState.deployedAddresses.find(
-              (address) => address === e.target.value
-            );
+          <Form.Select
+            onChange={(e) => {
+              const address = voteState.deployedAddresses.find(
+                (address) => address === e.target.value
+              );
 
-            setSelect(address);
-          }}
-          style={{ width: "350px" }}
-        >
-          {voteState?.deployedAddresses.length > 0
-            ? voteState?.deployedAddresses.map((address, index) => (
-                <option key={index} value={address}>
-                  {address}
-                </option>
-              ))
-            : null}
-        </Form.Select>
+              setSelect(address);
+            }}
+            style={{ width: "350px" }}
+          >
+            {voteState?.deployedAddresses.length > 0
+              ? voteState?.deployedAddresses.map((address, index) => (
+                  <option key={index} value={address}>
+                    {address}
+                  </option>
+                ))
+              : null}
+          </Form.Select>
         </Col>
         <Col>
-        
-        <Button onClick={handleSelectVote} variant="primary">
-          Connecter
-        </Button>
+          <Button onClick={handleSelectVote} variant="primary">
+            Connect to Vote
+          </Button>
         </Col>
-   <Col>
-        <h5>
-          Create a new vote
-        </h5>
+        <Col></Col>
+        <Col>
+        <Form.Label>Create a new vote</Form.Label>
         </Col>
         <Col>
-        <Button
-          onClick={handleCreateVote}
-          className="justify-content-end"
-          variant="warning"
-        >
-          Deploy
-        </Button>
+          <Button
+            onClick={handleCreateVote}
+            className="justify-content-end"
+            variant="warning"
+          >
+            Deploy
+          </Button>
         </Col>
-   </Row>
-        </Container>
+      </Row>
+    </Container>
   );
 }
 

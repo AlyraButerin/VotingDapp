@@ -128,7 +128,6 @@ function AdminActions({ setIsVoteTallied }) {
 
   return (
     <div className="bg-body-tertiary">
-      AdminActions
       <div>
         <select>
           {whiteList && whiteList.length > 0

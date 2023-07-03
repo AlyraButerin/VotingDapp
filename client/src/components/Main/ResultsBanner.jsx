@@ -1,9 +1,8 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import useVote from "../../contexts/VoteContext/useVote";
-import Container from 'react-bootstrap/esm/Container';
+import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button';
 import Col from "react-bootstrap/Col";
 import Whitelist from './Whitelist';
 import ProposalsList from './ProposalsList';
@@ -23,18 +22,18 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
   }, [winningProposal]);
 
   return (
-    <Container>
+    <Container style = {{height:"350px"}}>
       <Row xs={1} md={2}>
       <Col>
       <>
       {voteState.isAdmin ? <Whitelist /> : <div></div>} 
-      {voteState.isVoter ? <Whitelist /> : <div></div>} 
+      {voteState.isVoter ? <ProposalsList /> : <div></div>} 
       </>
       </Col>
       <Col>
       <>
-      {voteState.isAdmin ? <Whitelist /> : <div></div>} 
-      {voteState.isVoter ? <Whitelist /> : <div></div>} 
+      {voteState.isAdmin ? <ProposalsList /> : <div></div>} 
+      {voteState.isVoter ? <WinResults /> : <div></div>} 
       </>
       </Col>
       </Row>
