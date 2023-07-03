@@ -20,9 +20,19 @@ the different features are as follows:
 - **React**
 - **Truffle**
 
+  ## Setup:
+- **Local: **
+  ganache
+  truffle migrate
+  npm start
+  
+- **Goerli**
+  Start
+
 
 ## The Workflow:
 The Voting process follows some steps: 
+(It may be buggy for the default contract, in this case, deploy a new one and connect to it)
 * Registering Voters,
 * Proposals Registration (Start and Stop),
 * Voting Session (Start and Stop),
