@@ -28,7 +28,7 @@ the different features are as follows:
   
 - **Goerli**
   Start
-
+Adresse de deploiement sur Goerli : 0x85A5E15e2348eB5d6c808364a01CBafE26a58dDe
 
 ## The Workflow:
 The Voting process follows some steps: 
