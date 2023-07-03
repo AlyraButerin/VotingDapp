@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
 
 
 function WinResults({ getWinningProposal, winningProposal }) {
@@ -17,19 +17,15 @@ function WinResults({ getWinningProposal, winningProposal }) {
 
   return (
     <Container>
-
-  
-  <Button onClick={getWinningProposal}>Get Winning Proposal</Button>
-  {winnerToDisplay ? (
-    <div>
-      <p>Winner : {winnerToDisplay.description}</p>
-      <p>Vote Count : {winnerToDisplay.voteCount}</p>
-      <p>Id: {winnerToDisplay.id} </p>
-    </div>
-  ) : null}
-        
+      <Button onClick={getWinningProposal}>Get Winning Proposal</Button>
+      {winnerToDisplay ? (
+        <div>
+          <p>Winner : {winnerToDisplay.description}</p>
+          <p>Vote Count : {winnerToDisplay.voteCount}</p>
+          <p>Id: {winnerToDisplay.id} </p>
+        </div>
+      ) : null}
     </Container>
-
 
   );
 }

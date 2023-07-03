@@ -37,7 +37,7 @@ function VoterActions() {
   };
 
   const handleSetVote = () => {
-    initTx(voteState.contract, "setVote", 0, wallet.accounts[0]);
+    initTx(voteState.contract, "setVote", votedProposal, wallet.accounts[0]);
 
     subscribeEvent(voteState.contract, "Voted", true);
   };

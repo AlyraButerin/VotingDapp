@@ -120,68 +120,45 @@ export default function EventManager(props) {
     let content = "";
 
     if (show.type === "success") {
-      const baseContent = (
-        <>
-          <p>
-            <b>{props.data.name}</b> <i>Its information :</i>
-          </p>
-          <hr />
-        </>
-      );
+      // const baseContent = (
+      //   <>
+      //     <p>
+      //       <b>{props.data.name}</b> <i>Its information :</i>
+      //     </p>
+      //     <hr />
+      //   </>
+      // );
       let details;
       switch (props.data.name) {
         case "VoterRegistered":
-          details = (
-            <>
-              <p>
-                <b> {`Address : ${show.data.voterAddress}`}</b>
-              </p>
-            </>
-          );
+          details = `Address : ${show.data.voterAddress}`;
           break;
         case "WorkflowStatusChange":
-          details = (
-            <>
-              <p>
-                {" "}
-                <b>
-                  {" "}
-                  {`Previous status : ${show.data.previousStatus} - New status : ${show.data.newStatus}`}{" "}
-                </b>
-              </p>
-            </>
-          );
+          details = `Previous status : ${show.data.previousStatus} - New status : ${show.data.newStatus}`;
           break;
         case "ProposalRegistered":
-          details = (
-            <>
-              <p>
-                {" "}
-                <b> {`ID of registered proposal : ${show.data.proposalId}`} </b>
-              </p>
-            </>
-          );
+          details = `ID of registered proposal : ${show.data.proposalId}`;
           break;
         case "Voted":
-          details = (
-            <>
-              <p>
-                {" "}
-                <b>
-                  {" "}
-                  {`Voter : ${show.data.voter} - vote for ID : ${show.data.proposalId}`}{" "}
-                </b>
-              </p>
-            </>
-          );
+          details = `Voter : ${show.data.voter} - vote for ID : ${show.data.proposalId}`;
           break;
         default:
           break;
       }
       content = (
         <>
-          {baseContent}
-          {details}
+          {/* {baseContent}
+          {details} */}
+
+          <p>
+            <b>{`Event ${props.data.name} !`}</b> <i>Its information :</i>
+          </p>
+          <hr />
+
+          <p>
+            {" "}
+            <b> {details} </b>
+          </p>
         </>
       );
     } else if (show.type === "danger") {
