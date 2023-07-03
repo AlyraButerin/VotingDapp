@@ -8,8 +8,8 @@ node_modules
 # Production
 build
 # !! A COMMENTER POUR LE DEPLOIEMENT PROD !!
-client/src/contracts
-client/*/src/contracts
+#client/src/contracts
+#client/*/src/contracts
 
 # Testing
 coverage
