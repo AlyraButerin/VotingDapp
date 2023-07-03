@@ -22,10 +22,8 @@ function ActionsBanner({ setIsVoteTallied }) {
       <>
         {voteState.isAdmin ? (
           <AdminActions setIsVoteTallied={setIsVoteTallied} />
-        ) : (
-          <div>Not Admin</div>
-        )}
-        {voteState.isVoter ? <VoterActions /> : <div>Not Voter</div>}
+        ) : null}
+        {voteState.isVoter ? <VoterActions /> : null}
       </>
     </Container>
   );

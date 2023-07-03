@@ -13,12 +13,11 @@ import useConnection from "../../contexts/ConnectionContext/useConnection";
 @todo : REFACTORING
 */
 function Main() {
-  const { wallet, hasProvider, handleConnect, handleDisconnect } =
-    useConnection();
+  const { wallet, hasProvider, handleConnect } = useConnection();
   const { voteState, connectToVote } = useVote();
 
-  const [deployedAddresses, setDeployedAddresses] = useState([]);
-  const [select, setSelect] = useState(null);
+  // const [deployedAddresses, setDeployedAddresses] = useState([]);
+  // const [select, setSelect] = useState(null);
   const [isVoteTallied, setIsVoteTallied] = useState(false);
   const [winningProposal, setWinningProposal] = useState({
     id: null,
@@ -26,19 +25,19 @@ function Main() {
     voteCount: null,
   });
 
-  /**
-   * @dev :  handleSelectVote
-   * @todo : dirty fix for default add not loading => manage the first state of select!!!!
-   */
-  const handleSelectVote = () => {
-    console.log("handleSelectVote", select);
-    console.log("handleSelectVote", voteState.deployedAddresses);
-    if (select === null && voteState.deployedAddresses.length > 0) {
-      connectToVote(voteState.deployedAddresses[0]);
-    } else {
-      connectToVote(select);
-    }
-  };
+  // /**
+  //  * @dev :  handleSelectVote
+  //  * @todo : dirty fix for default add not loading => manage the first state of select!!!!
+  //  */
+  // const handleSelectVote = () => {
+  //   console.log("handleSelectVote", select);
+  //   console.log("handleSelectVote", voteState.deployedAddresses);
+  //   if (select === null && voteState.deployedAddresses.length > 0) {
+  //     connectToVote(voteState.deployedAddresses[0]);
+  //   } else {
+  //     connectToVote(select);
+  //   }
+  // };
 
   const getWinningProposal = async () => {
     const winningProposalId = await voteState.contract.methods
@@ -55,15 +54,15 @@ function Main() {
     console.log("winningProposal", winningProposal, winningProposalId);
   };
 
-  /*
-  @dev : set deployedAddresses and select when voteState.deployedAddresses change
-  */
-  useEffect(() => {
-    setDeployedAddresses(voteState.deployedAddresses);
-    if (select === null && voteState.deployedAddresses.length > 0) {
-      setSelect(voteState.deployedAddresses[0]);
-    }
-  }, [voteState.deployedAddresses]);
+  // /*
+  // @dev : set deployedAddresses and select when voteState.deployedAddresses change
+  // */
+  // useEffect(() => {
+  //   setDeployedAddresses(voteState.deployedAddresses);
+  //   if (select === null && voteState.deployedAddresses.length > 0) {
+  //     setSelect(voteState.deployedAddresses[0]);
+  //   }
+  // }, [voteState.deployedAddresses]);
 
   // /*
   // @todo : REMOVE AT THE END
@@ -98,15 +97,15 @@ function Main() {
     <div className="Connection" style = {{backgroundColor: "#dce9ef", border: "0.5px solid white"}}>
       {hasProvider ? (
         window.ethereum?.isMetaMask && wallet?.accounts.length < 1 ? (
-          <button onClick={handleConnect}>Connect MetaMask</button>
+          <Button onClick={handleConnect}>Connect MetaMask</Button>
         ) : wallet != null ? (
           wallet?.accounts.length > 0 && (
             <>
               <VotesBanner />
               {/* @todo : TEMPORARY CODE, USE A NEW COMPONENT INSTEAD */}
-              <label>
-                DeployedAddess:
-                {/* <select
+              {/* <label>
+                DeployedAddess: */}
+              {/* <select
                   onChange={(e) => {
                     const address = voteState.deployedAddresses.find(
                       (address) => address === e.target.value
@@ -122,7 +121,7 @@ function Main() {
                       ))
                     : null}
                 </select> */}
-                <select
+              {/* <select
                   onChange={(e) => {
                     const address = deployedAddresses.find(
                       (address) => address === e.target.value
@@ -137,27 +136,17 @@ function Main() {
                         </option>
                       ))
                     : null}
-                </select>
-                {/* @todo : TEMPORARY CODE, USE A NEW COMPONENT INSTEAD */}
-                <button onClick={handleSelectVote}>Connect to Vote</button>
-                <button onClick={handleDisconnect}>Disconnect/return</button>
-              </label>
+                </select> */}
+              {/* @todo : TEMPORARY CODE, USE A NEW COMPONENT INSTEAD */}
+              {/* <button onClick={handleSelectVote}>Connect to Vote</button> */}
+              {/* <button onClick={handleDisconnect}>Disconnect/return</button> */}
+              {/* </label> */}
               <ActionsBanner setIsVoteTallied={setIsVoteTallied} />
               <ResultsBanner
                 winningProposal={winningProposal}
                 getWinningProposal={getWinningProposal}
               />
-              {/* @todo : REMOVE DEMO INFOS */}
-              <label>Wallet Accounts: {wallet?.accounts[0]}</label>
-              <label>Wallet Balance: {wallet?.balance}</label> {/* New */}
-              <label>Hex ChainId: {wallet?.chainId}</label> {/* New */}
-              <label>Numeric ChainId: {wallet?.chainId}</label>{" "}
-              {wallet?.chainId !== "0x539" ? (
-                <label>Wrong Network</label>
-              ) : (
-                <label>Ganache Network</label>
-              )}
-              {/* @todo : REMOVE DEMO INFOS */}
+              
             </>
           )
         ) : null

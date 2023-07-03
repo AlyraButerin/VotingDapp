@@ -1,36 +1,45 @@
 import useVote from "../../contexts/VoteContext/useVote";
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
-import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
+import Navbar from "react-bootstrap/Navbar";
+import { workflowToString } from "../../utils/voteUtils";
 
 function StatusBanner() {
   const { voteState } = useVote();
-    return (
-      <Navbar style = {{backgroundColor: "#91bbd1"}}>
+
+  const getVoteAddress = () => {
+    if (
+      voteState?.deployedAddresses.length > 0 &&
+      voteState.contractAddressIndex !== null
+    ) {
+      return voteState?.deployedAddresses[voteState.contractAddressIndex];
+    } else {
+      return "none";
+    }
+  };
+
+  const getVoteStatus = () => {
+    if (voteState?.workflowIndex !== null) {
+      return workflowToString(voteState?.workflowIndex);
+    } else {
+      return "none";
+    }
+  };
+
+  return (
+    <Navbar style={{ backgroundColor: "#91bbd1", color: "white" }}>
       <Container>
-      <Navbar.Collapse className="justify-content-left">
-          
-          {voteState?.deployedAddresses.length > 0 ?
-          voteState?.deployedAddresses.map((address, index) => (
-            <Form.Label value={address}>
-              {"You are connected to Vote : " + address}
-              </Form.Label>
-          ))
-    
-           : <div></div>}
+        <Navbar.Collapse className="justify-content-left">
+          <Navbar.Text>Connected to Vote : {getVoteAddress()}</Navbar.Text>
+
         </Navbar.Collapse>
 
         <Navbar.Collapse className="justify-content-end">
-        <Form.Label>
-          Vote Status: 
-          </Form.Label>
+          <Navbar.Text>Vote Status: {getVoteStatus()}</Navbar.Text>
+
         </Navbar.Collapse>
-        
-        
-    
       </Container>
     </Navbar>
-    );
-  }
-  
-  export default StatusBanner;
+  );
+}
+
+export default StatusBanner;
