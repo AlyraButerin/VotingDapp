@@ -21,7 +21,7 @@ the different features are as follows:
 - **Truffle**
 
   ## Setup:
-- **Local: **
+- Local: 
   ganache
   truffle migrate
   npm start
