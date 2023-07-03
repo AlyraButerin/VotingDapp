@@ -1,5 +1,8 @@
 # Voting Dapp Project on React using Truffle Box
 
+## Vercel Link:
+https://voting-dapp-gamma.vercel.app/
+
 ## Description:
 The project is acdecentralised application based on Ethereum .
 The Dapp can be used by an organization to organize elections with voters who submit proposals to vote.
