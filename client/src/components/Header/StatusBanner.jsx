@@ -3,14 +3,24 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 
 function StatusBanner() {
-  const { } = useVote();
+  const { voteState } = useVote();
     return (
-      <Navbar className="bg-body-tertiary">
+      <Navbar style = {{backgroundColor: "#91bbd1", color:"white"}}>
       <Container>
       <Navbar.Collapse className="justify-content-left">
-          <Navbar.Text>
-          Connected to Vote : 
-          </Navbar.Text>
+          
+
+          {voteState?.deployedAddresses.length > 0 ?
+          voteState?.deployedAddresses.map((address, index) => (
+            <Navbar.Text value={address}>
+              {"You are connected to Vote : " + address}
+              </Navbar.Text>
+          ))
+
+           
+      
+          
+           : <div></div>}
         </Navbar.Collapse>
 
         <Navbar.Collapse className="justify-content-end">
