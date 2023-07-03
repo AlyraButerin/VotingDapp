@@ -36,7 +36,7 @@ function VoteProvider({ children }) {
       .send({
         from: wallet.accounts[0],
         gas: 3000000, //1500000
-        gasPrice: "300000000000",
+        gasPrice: "30000000000",
       });
     const address = newContractInstance.options.address;
 
