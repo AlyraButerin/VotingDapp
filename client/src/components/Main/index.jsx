@@ -89,7 +89,7 @@ function Main() {
 
   return (
     // INTEGRER UN ALERT POUR METAMASK UNINSTALLED
-    <div className="Connection">
+    <div className="Connection" style = {{backgroundColor: "#dce9ef"}}>
       {hasProvider ? (
         window.ethereum?.isMetaMask && wallet?.accounts.length < 1 ? (
           <button onClick={handleConnect}>Connect MetaMask</button>

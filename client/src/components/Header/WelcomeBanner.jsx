@@ -3,7 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 
 function WelcomeBanner() {
     return (
-      <Navbar className="bg-body-tertiary">
+      <Navbar style = {{backgroundColor: "#91bbd1", color:"white", height:"150px"}}>
       <Container>
       <Navbar.Collapse className="justify-content-center">
           <h1>welcome</h1>
