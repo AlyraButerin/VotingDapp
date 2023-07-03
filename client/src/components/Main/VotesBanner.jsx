@@ -6,9 +6,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 import Navbar from "react-bootstrap/Navbar";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/esm/Container";
+
 
 function VotesBanner() {
   const { wallet, hasProvider, handleConnect, handleDisconnect } =
@@ -57,7 +55,7 @@ function VotesBanner() {
   }, [voteState.deployedAddresses]);
 
   return (
-    <Navbar className="bg-body-tertiary">
+    <Navbar className="bg-body-tertiary p-5" style={{backgroundColor: "#dce9ef"}}>
       <Stack direction="horizontal" gap={5}>
         <Navbar.Text>Select a vote</Navbar.Text>
         <Form.Select

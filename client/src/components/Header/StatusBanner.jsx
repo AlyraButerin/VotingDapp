@@ -35,6 +35,7 @@ function StatusBanner() {
 
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>Vote Status: {getVoteStatus()}</Navbar.Text>
+
         </Navbar.Collapse>
       </Container>
     </Navbar>

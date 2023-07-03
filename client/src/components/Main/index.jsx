@@ -94,10 +94,10 @@ function Main() {
 
   return (
     // INTEGRER UN ALERT POUR METAMASK UNINSTALLED
-    <div className="Connection" style = {{backgroundColor: "#dce9ef"}}>
+    <div className="Connection" style = {{backgroundColor: "#dce9ef", border: "0.5px solid white"}}>
       {hasProvider ? (
         window.ethereum?.isMetaMask && wallet?.accounts.length < 1 ? (
-          <button onClick={handleConnect}>Connect MetaMask</button>
+          <Button onClick={handleConnect}>Connect MetaMask</Button>
         ) : wallet != null ? (
           wallet?.accounts.length > 0 && (
             <>
@@ -146,17 +146,7 @@ function Main() {
                 winningProposal={winningProposal}
                 getWinningProposal={getWinningProposal}
               />
-              {/* @todo : REMOVE DEMO INFOS */}
-              <label>Wallet Accounts: {wallet?.accounts[0]}</label>
-              <label>Wallet Balance: {wallet?.balance}</label> {/* New */}
-              <label>Hex ChainId: {wallet?.chainId}</label> {/* New */}
-              <label>Numeric ChainId: {wallet?.chainId}</label>{" "}
-              {wallet?.chainId !== "0x539" ? (
-                <label>Wrong Network</label>
-              ) : (
-                <label>Ganache Network</label>
-              )}
-              {/* @todo : REMOVE DEMO INFOS */}
+              
             </>
           )
         ) : null

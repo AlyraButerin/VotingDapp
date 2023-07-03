@@ -2,14 +2,10 @@ import React from "react";
 
 import { useContext, useEffect, useState } from "react";
 import useVote from "../../contexts/VoteContext/useVote";
-import Container from "react-bootstrap/esm/Container";
+import Container from 'react-bootstrap/Container';
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
-import Whitelist from "./Whitelist";
-import ProposalsList from "./ProposalsList";
-import WinResults from "./WinResults";
-import TxContext from "../../contexts/TxContext/TxContext";
 import useConnection from "../../contexts/ConnectionContext/useConnection";
 
 /**
@@ -103,29 +99,10 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
 
   //className="vr" u
   return (
-    <Container>
-      <Row xs={1} md={2}>
-
-        <Col>
-          <>
-            {voteState.isAdmin ? <Whitelist /> : <div></div>}
-            {voteState.isVoter ? <Whitelist /> : <div></div>}
-          </>
-        </Col>
-        <Col>
-          <>
-            {voteState.isAdmin ? <Whitelist /> : <div></div>}
-            {voteState.isVoter ? <Whitelist /> : <div></div>}
-          </>
-        </Col>
-      </Row>
-
+    <Container style = {{height:"350px"}}>
       <Row className="ResultsBanner">
-        <center>
-          <h5>Results Banner</h5>
-        </center>
         <Col className="">
-          <button onClick={getWinnerProposal}>Get Winning Proposal</button>
+          <Button className="m-2" onClick={getWinnerProposal}>Get Winning Proposal</Button>
           {/* {winnerToDisplay ? (
           <div>
             <p>Winner : {winnerToDisplay.description}</p>
@@ -133,10 +110,12 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
             <p>Id: {winnerToDisplay.id} </p>
           </div>
         ) : null} */}
+        <div>
           <label>Winning Proposal :</label>
           <p>Id: {winningProposal.id}</p>
           <p>Description: {winningProposal.description}</p>
           <p>Vote Count: {winningProposal.voteCount}</p>
+          </div>
         </Col>
         <Col className="">
           <input
@@ -144,11 +123,13 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
             placeholder="Enter a proposal index to get its details :"
             onChange={(e) => setAskedProposalId(e.target.value)}
           />
-          <button onClick={getProposalDetails}>Get Proposal Details</button>
+          <Button className="m-2"  onClick={getProposalDetails}>Get Proposal Details</Button>
+          <div>
           <label>Proposal Details :</label>
           <p>Id: {askedProposal.id}</p>
           <p>Description: {askedProposal.description}</p>
           <p>Vote Count: {askedProposal.voteCount}</p>
+          </div>
         </Col>
       </Row>
 

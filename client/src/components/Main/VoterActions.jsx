@@ -77,9 +77,9 @@ function VoterActions() {
           onChange={handleProposalChange}
         />
 
-        <button onClick={handleAddProposal} disabled={disabledButton[0]}>
+        <Button onClick={handleAddProposal} disabled={disabledButton[0]}>
           Add Proposal
-        </button>
+        </Button>
       </div>
       <div>
         <input
