@@ -120,14 +120,6 @@ export default function EventManager(props) {
     let content = "";
 
     if (show.type === "success") {
-      // const baseContent = (
-      //   <>
-      //     <p>
-      //       <b>{props.data.name}</b> <i>Its information :</i>
-      //     </p>
-      //     <hr />
-      //   </>
-      // );
       let details;
       switch (props.data.name) {
         case "VoterRegistered":
@@ -147,9 +139,6 @@ export default function EventManager(props) {
       }
       content = (
         <>
-          {/* {baseContent}
-          {details} */}
-
           <p>
             <b>{`Event ${props.data.name} !`}</b> <i>Its information :</i>
           </p>

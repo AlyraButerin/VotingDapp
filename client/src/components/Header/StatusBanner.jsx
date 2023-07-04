@@ -1,7 +1,5 @@
 import useVote from "../../contexts/VoteContext/useVote";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import { Col, Row, Stack } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { workflowToString } from "../../utils/voteUtils";
 
 function StatusBanner() {
@@ -27,41 +25,18 @@ function StatusBanner() {
   };
 
   return (
-    // <Navbar style={{ backgroundColor: "#91bbd1", color: "white" }}>
-    //   <Container>
-    //     <Navbar.Collapse className="justify-content-left">
-    //       <Navbar.Text>Connected to Vote : {getVoteAddress()}</Navbar.Text>
-
-    //     </Navbar.Collapse>
-
-    //     <Navbar.Collapse className="justify-content-end">
-    //       <Navbar.Text>Vote Status: {getVoteStatus()}</Navbar.Text>
-
-    //     </Navbar.Collapse>
-    //   </Container>
-    // </Navbar>
     <footer style={{ backgroundColor: "#91bbd1", color: "white" }}>
-      {/* <Stack direction="horizontal justify-content-between" fluid> */}
       <Row>
-        {/* <Container> */}
-        {/* <div className="justify-content-left"> */}
-        {/* <Col> style={{ justifyContent: "left" }}> */}
         <Col>
           <label className="p-1">Connected to Vote : </label>
           <label> {getVoteAddress()}</label>
         </Col>
 
-        <Col
-          xs={4}
-          // className="justify-content-end "
-          style={{ textAlign: "end" }}
-        >
+        <Col xs={4} style={{ textAlign: "end" }}>
           <labe className="p-1">Vote Status :</labe>
           <label className="pe-1"> {getVoteStatus()}</label>
         </Col>
-        {/* </Container> */}
       </Row>
-      {/* </Stack> */}
     </footer>
   );
 }

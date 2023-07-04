@@ -1,12 +1,11 @@
-import React, { useState, useLayoutEffect, useEffect, useContext } from "react";
+import React, { useState, useLayoutEffect, useContext } from "react";
 import useVote from "../../contexts/VoteContext/useVote";
 import TxContext from "../../contexts/TxContext/TxContext";
 import useConnection from "../../contexts/ConnectionContext/useConnection";
 import Button from "react-bootstrap/Button";
 
 function VoterActions() {
-  const { initTx, subscribeEvent, addVoter, closeAddVoter } =
-    useContext(TxContext);
+  const { initTx, subscribeEvent } = useContext(TxContext);
 
   const { voteState } = useVote();
   const { wallet } = useConnection();

@@ -90,13 +90,6 @@ function VoteProvider({ children }) {
         }
       });
 
-    console.log(
-      "(VoteProvider)/getContractInfos : ",
-      isAdmin,
-      isVoter,
-      workflowIndex
-    );
-
     return { isAdmin, isVoter, workflowIndex };
   };
 
@@ -110,7 +103,6 @@ function VoteProvider({ children }) {
         workflowIndex: infos.workflowIndex,
       },
     });
-    console.log("UPDAT VOTE CALLED VOTE PROVIFER msg");
   };
 
   /**
@@ -204,7 +196,7 @@ function VoteProvider({ children }) {
     };
 
     tryInit();
-    console.log("(VoteProvider)/useEffect", voteState);
+    // console.log("(VoteProvider)/useEffect", voteState);
   }, []); //[init]);
 
   /**

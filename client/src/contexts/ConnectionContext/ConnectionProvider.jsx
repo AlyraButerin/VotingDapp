@@ -29,8 +29,6 @@ const ConnectionProvider = ({ children }) => {
     chainId: "",
   };
   const [wallet, setWallet] = useState(initialState);
-  // const [isConnected, setIsConnected] = useState(false);
-  // const [isNetworkOK, setIsNetworkOK] = useState(false);
 
   /*
   @dev : useEffect to check if the user has metamask installed and load the accounts and chainId
@@ -89,8 +87,7 @@ const ConnectionProvider = ({ children }) => {
     const chainId = await window.ethereum.request({
       method: "eth_chainId",
     });
-    // const isConnected = accounts.length > 0;
-    // const isNetworkOK = isChainValid(chainId);
+
     setWallet({ accounts, chainId });
     console.log("(ConnectionProvider) updateWallet : ", wallet);
   };

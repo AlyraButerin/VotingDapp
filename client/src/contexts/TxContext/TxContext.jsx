@@ -44,7 +44,9 @@ export function TxProvider(props) {
     instance: null,
     name: "",
   });
-  /*resutl of event to forward */
+  /*resutl of event to forward 
+  @todo : remove (change way to manage close events)
+  */
   const [test, setTest] = useState(null);
 
   /**
@@ -61,11 +63,6 @@ export function TxProvider(props) {
     fromAccount,
     callbackObject = null
   ) => {
-    console.log(
-      "intiTX /n CHECK LE PB DE 1ere tx et 1er contract/NICI/NICI/ICI/NICI/nICI/nICI/n/n",
-      functionName,
-      contractInstance
-    );
     setTxArray((oldArray) => {
       const newArray = [...oldArray];
       newArray.push({
@@ -112,7 +109,7 @@ export function TxProvider(props) {
   };
 
   /**
-   * manage the result of a birth by breeding (forward/close)
+   * manage the result event (forward/close)
    *
    * @param {*} event data received
    */
@@ -130,10 +127,6 @@ export function TxProvider(props) {
         value={{
           initTx,
           subscribeEvent,
-          // test,
-          // setTest,
-          // forwardEventResult,
-          // closeEventResult,
           alertInvalidTx,
           setAlertInvalidTx,
         }}

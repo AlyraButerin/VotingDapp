@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useVote from "../../contexts/VoteContext/useVote";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -16,9 +16,10 @@ import useConnection from "../../contexts/ConnectionContext/useConnection";
  * @todo : DON T FORGET TO MAKE READ FUCNTION GENERIC TO (see tx manager)
  */
 function ResultsBanner({ getWinningProposal, winningProposal }) {
+  /* unused at the moment => idea callback after EndVoting event */
   const [winnerToDisplay, setWinnerToDisplay] = useState(null);
 
-  const { voteState, connectToVote } = useVote();
+  const { voteState } = useVote();
   const { wallet } = useConnection();
   const [askedProposalId, setAskedProposalId] = useState("");
   const [askedProposal, setAskedProposal] = useState({
@@ -33,6 +34,7 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
     voteCount: null,
   });
 
+  /* unused at the moment => idea callback after EndVoting event */
   const updateWinnerData = async () => {
     console.log("updateWinnerData", winnerProposal);
     setWinnerToDisplay(winnerProposal);
@@ -65,10 +67,6 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
   };
 
   const getWinnerProposal = async () => {
-    // if (voteState.workflowIndex !== 4) {
-    //   alert("Vote is not tallied yet");
-    //   return;
-    // }
     try {
       const result = await voteState.contract.methods
         .winningProposalID()
@@ -104,13 +102,6 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
           <Button className="m-2" onClick={getWinnerProposal}>
             Get Winning Proposal
           </Button>
-          {/* {winnerToDisplay ? (
-          <div>
-            <p>Winner : {winnerToDisplay.description}</p>
-            <p>Vote Count : {winnerToDisplay.voteCount}</p>
-            <p>Id: {winnerToDisplay.id} </p>
-          </div>
-        ) : null} */}
           <div>
             <label>Winning Proposal :</label>
             <p>Id: {winningProposal.id}</p>

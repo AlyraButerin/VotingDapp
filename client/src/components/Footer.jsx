@@ -1,6 +1,11 @@
 function Link({ uri, text }) {
   return (
-    <a href={uri} target="_blank" rel="noreferrer">
+    <a
+      href={uri}
+      target="_blank"
+      rel="noreferrer"
+      style={{ color: "black", margin: "5px" }}
+    >
       {text}
     </a>
   );
@@ -8,7 +13,10 @@ function Link({ uri, text }) {
 
 function Footer() {
   return (
-    <footer style={{ backgroundColor: "#91bbd1" }}>
+    <footer
+      className="d-flex justify-content-end"
+      style={{ backgroundColor: "#91bbd1" }}
+    >
       <Link uri={"https://trufflesuite.com"} text={"Truffle"} />
       <Link uri={"https://reactjs.org"} text={"React"} />
       <Link uri={"https://soliditylang.org"} text={"Solidity"} />

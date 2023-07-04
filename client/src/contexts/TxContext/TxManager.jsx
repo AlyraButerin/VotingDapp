@@ -212,8 +212,6 @@ export default function TxManager({ data, closeTx, setAlertInvalidTx }) {
         }
       }
 
-      //ATTENTION VERIFIER BON UPDATE QD ADDVOTER et add le owner lui meme
-      //info immediate null (liée à revert de getVoter sur même tx ?(pb async ??)
       if (isNeedingUpdate(functionName)) {
         console.log("HANDLE TX CALL UPDATE");
         updateContractInfos(contractInstance);

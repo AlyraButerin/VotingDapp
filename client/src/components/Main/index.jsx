@@ -6,7 +6,6 @@ import useVote from "../../contexts/VoteContext/useVote";
 import useConnection from "../../contexts/ConnectionContext/useConnection";
 import { Button } from "react-bootstrap";
 import { Stack, Row, Container } from "react-bootstrap";
-// import AddressList from "./AddressList";
 
 /*
 @dev :  Main component
@@ -18,8 +17,6 @@ function Main() {
   const { wallet, hasProvider, handleConnect } = useConnection();
   const { voteState, connectToVote } = useVote();
 
-  // const [deployedAddresses, setDeployedAddresses] = useState([]);
-  // const [select, setSelect] = useState(null);
   const [isVoteTallied, setIsVoteTallied] = useState(false);
   const [winningProposal, setWinningProposal] = useState({
     id: null,
@@ -27,20 +24,7 @@ function Main() {
     voteCount: null,
   });
 
-  // /**
-  //  * @dev :  handleSelectVote
-  //  * @todo : dirty fix for default add not loading => manage the first state of select!!!!
-  //  */
-  // const handleSelectVote = () => {
-  //   console.log("handleSelectVote", select);
-  //   console.log("handleSelectVote", voteState.deployedAddresses);
-  //   if (select === null && voteState.deployedAddresses.length > 0) {
-  //     connectToVote(voteState.deployedAddresses[0]);
-  //   } else {
-  //     connectToVote(select);
-  //   }
-  // };
-
+  /*TO DO choose and clean the flow to update the winner at event reception*/
   const getWinningProposal = async () => {
     const winningProposalId = await voteState.contract.methods
       .winningProposalID()
@@ -55,23 +39,6 @@ function Main() {
     });
     console.log("winningProposal", winningProposal, winningProposalId);
   };
-
-  // /*
-  // @dev : set deployedAddresses and select when voteState.deployedAddresses change
-  // */
-  // useEffect(() => {
-  //   setDeployedAddresses(voteState.deployedAddresses);
-  //   if (select === null && voteState.deployedAddresses.length > 0) {
-  //     setSelect(voteState.deployedAddresses[0]);
-  //   }
-  // }, [voteState.deployedAddresses]);
-
-  // /*
-  // @todo : REMOVE AT THE END
-  // */
-  // const afficheVote = () => {
-  //   console.log("(index/Main)/voteState", voteState);
-  // };
 
   /*
   @dev : watcher on voteState changes
@@ -95,15 +62,10 @@ function Main() {
   }, [isVoteTallied]);
 
   return (
-    // INTEGRER UN ALERT POUR METAMASK UNINSTALLED
-    //CHANGEMENT DIV PR STACK fluid? ROW
     <Container
       fluid
-      // className="Connection"
       style={{
         backgroundColor: "#dce9ef",
-        // height: "100%",
-        // border: "0.5px solid white",
         padding: "0",
         margin: "0",
       }}
@@ -115,45 +77,6 @@ function Main() {
           wallet?.accounts.length > 0 && (
             <>
               <VotesBanner />
-              {/* @todo : TEMPORARY CODE, USE A NEW COMPONENT INSTEAD */}
-              {/* <label>
-                DeployedAddess: */}
-              {/* <select
-                  onChange={(e) => {
-                    const address = voteState.deployedAddresses.find(
-                      (address) => address === e.target.value
-                    );
-                    setSelect(address);
-                  }}
-                >
-                  {voteState?.deployedAddresses.length > 0
-                    ? voteState?.deployedAddresses.map((address, index) => (
-                        <option key={index} value={address}>
-                          {address}
-                        </option>
-                      ))
-                    : null}
-                </select> */}
-              {/* <select
-                  onChange={(e) => {
-                    const address = deployedAddresses.find(
-                      (address) => address === e.target.value
-                    );
-                    setSelect(address);
-                  }}
-                >
-                  {deployedAddresses.length > 0
-                    ? deployedAddresses.map((address, index) => (
-                        <option key={index} value={address}>
-                          {address}
-                        </option>
-                      ))
-                    : null}
-                </select> */}
-              {/* @todo : TEMPORARY CODE, USE A NEW COMPONENT INSTEAD */}
-              {/* <button onClick={handleSelectVote}>Connect to Vote</button> */}
-              {/* <button onClick={handleDisconnect}>Disconnect/return</button> */}
-              {/* </label> */}
               <ActionsBanner setIsVoteTallied={setIsVoteTallied} />
               <ResultsBanner
                 winningProposal={winningProposal}

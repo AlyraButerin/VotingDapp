@@ -50,7 +50,7 @@ const resetSate = {
 */
 const reducer = (voteState, action) => {
   const { type, data } = action;
-  // let nextData = {};
+
   switch (type) {
     case actions.init:
       return { ...voteState, ...data };
@@ -61,39 +61,28 @@ const reducer = (voteState, action) => {
         ...voteState.deployedAddresses,
         data.contractAddress,
       ];
-      const contractAddressIndex = deployedAddresses.length - 1;
-      const contract = data.contract;
-      const isAdmin = true; //RETIRER / POUR TEST
-      const isVoter = data.isVoter; //RETIRER / POUR TEST
+
       const addData = {
         deployedAddresses,
-        contractAddressIndex,
-        contract,
-        // isAdmin,
-        // isVoter, //RETIRER / POUR TEST
+        contractAddressIndex: deployedAddresses.length - 1,
+        contract: data.contract,
       };
       return { ...voteState, ...addData };
     }
     case actions.loadVote:
-      const contract = data.contract;
       const contractAddressIndex = voteState.deployedAddresses.indexOf(
         data.contract.options.address
       );
-      const isAdmin = data.isAdmin;
-      const isVoter = data.isVoter;
-      const workflowIndex = data.workflowIndex;
+
       const loadData = {
         contractAddressIndex,
-        contract,
-        isAdmin,
-        isVoter,
-        workflowIndex,
+        contract: data.contract,
+        isAdmin: data.isAdmin,
+        isVoter: data.isVoter,
+        workflowIndex: data.workflowIndex,
       };
       return { ...voteState, ...loadData };
     case actions.updateVote:
-      // const isAdmin = data.isAdmin;
-      // const isVoter = data.isVoter;
-      // const workflowIndex = data.workflowIndex;
       const freshData = {
         isAdmin: data.isAdmin,
         isVoter: data.isVoter,
