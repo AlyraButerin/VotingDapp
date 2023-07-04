@@ -127,8 +127,9 @@ function AdminActions({ setIsVoteTallied }) {
   }, [voteState.workflowIndex]);
 
   return (
-    <div className="bg-body-tertiary mb-2">
-      <div className="bg-body-tertiary mb-3">
+    // <div className=" mb-2 ">
+    <Container fluid className=" ">
+      <div className=" mb-3">
         <select>
           {whiteList && whiteList.length > 0
             ? whiteList.map((address, index) => (
@@ -139,6 +140,7 @@ function AdminActions({ setIsVoteTallied }) {
             : null}
         </select>
         <input
+          className="m-2"
           type="text"
           placeholder="Enter a new voter address"
           onChange={handleChange}
@@ -147,20 +149,36 @@ function AdminActions({ setIsVoteTallied }) {
       </div>
       <div>
         <label> </label>
-        <Button className="m-2" onClick={handleStartProposal} disabled={disabledButton[0]}>
+        <Button
+          className="m-2"
+          onClick={handleStartProposal}
+          disabled={disabledButton[0]}
+        >
           start proposal registration
         </Button>
-        <Button className="m-2" onClick={handleEndProposal} disabled={disabledButton[1]}>
+        <Button
+          className="m-2"
+          onClick={handleEndProposal}
+          disabled={disabledButton[1]}
+        >
           End proposal registration
         </Button>
-        <Button className="m-2" onClick={handleStartVoting} disabled={disabledButton[2]}>
+        <Button
+          className="m-2"
+          onClick={handleStartVoting}
+          disabled={disabledButton[2]}
+        >
           Start voting session
         </Button>
-        <Button className="m-2" onClick={handleEndVoting} disabled={disabledButton[3]}>
+        <Button
+          className="m-2"
+          onClick={handleEndVoting}
+          disabled={disabledButton[3]}
+        >
           End voting session
         </Button>
       </div>
-    </div>
+    </Container>
   );
 }
 

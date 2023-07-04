@@ -2,7 +2,7 @@ import React from "react";
 
 import { useContext, useEffect, useState } from "react";
 import useVote from "../../contexts/VoteContext/useVote";
-import Container from 'react-bootstrap/Container';
+import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -32,7 +32,6 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
     description: null,
     voteCount: null,
   });
-
 
   const updateWinnerData = async () => {
     console.log("updateWinnerData", winnerProposal);
@@ -99,10 +98,12 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
 
   //className="vr" u
   return (
-    <Container style = {{height:"350px"}}>
+    <Container fluid style={{ height: "auto" }}>
       <Row className="ResultsBanner">
         <Col className="">
-          <Button className="m-2" onClick={getWinnerProposal}>Get Winning Proposal</Button>
+          <Button className="m-2" onClick={getWinnerProposal}>
+            Get Winning Proposal
+          </Button>
           {/* {winnerToDisplay ? (
           <div>
             <p>Winner : {winnerToDisplay.description}</p>
@@ -110,11 +111,11 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
             <p>Id: {winnerToDisplay.id} </p>
           </div>
         ) : null} */}
-        <div>
-          <label>Winning Proposal :</label>
-          <p>Id: {winningProposal.id}</p>
-          <p>Description: {winningProposal.description}</p>
-          <p>Vote Count: {winningProposal.voteCount}</p>
+          <div>
+            <label>Winning Proposal :</label>
+            <p>Id: {winningProposal.id}</p>
+            <p>Description: {winningProposal.description}</p>
+            <p>Vote Count: {winningProposal.voteCount}</p>
           </div>
         </Col>
         <Col className="">
@@ -123,16 +124,17 @@ function ResultsBanner({ getWinningProposal, winningProposal }) {
             placeholder="Enter a proposal index to get its details :"
             onChange={(e) => setAskedProposalId(e.target.value)}
           />
-          <Button className="m-2"  onClick={getProposalDetails}>Get Proposal Details</Button>
+          <Button className="m-2" onClick={getProposalDetails}>
+            Get Proposal Details
+          </Button>
           <div>
-          <label>Proposal Details :</label>
-          <p>Id: {askedProposal.id}</p>
-          <p>Description: {askedProposal.description}</p>
-          <p>Vote Count: {askedProposal.voteCount}</p>
+            <label>Proposal Details :</label>
+            <p>Id: {askedProposal.id}</p>
+            <p>Description: {askedProposal.description}</p>
+            <p>Vote Count: {askedProposal.voteCount}</p>
           </div>
         </Col>
       </Row>
-
     </Container>
   );
 }

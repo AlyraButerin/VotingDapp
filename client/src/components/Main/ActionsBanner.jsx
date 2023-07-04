@@ -18,7 +18,7 @@ function ActionsBanner({ setIsVoteTallied }) {
   };
 
   return (
-    <Container style = {{backgroundColor: "#91bbd1"}}>
+    <Container fluid style={{ backgroundColor: "#91bbd1" }}>
       <>
         {voteState.isAdmin ? (
           <AdminActions setIsVoteTallied={setIsVoteTallied} />

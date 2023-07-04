@@ -5,6 +5,7 @@ import ResultsBanner from "./ResultsBanner";
 import useVote from "../../contexts/VoteContext/useVote";
 import useConnection from "../../contexts/ConnectionContext/useConnection";
 import { Button } from "react-bootstrap";
+import { Stack, Row, Container } from "react-bootstrap";
 // import AddressList from "./AddressList";
 
 /*
@@ -95,7 +96,18 @@ function Main() {
 
   return (
     // INTEGRER UN ALERT POUR METAMASK UNINSTALLED
-    <div className="Connection" style = {{backgroundColor: "#dce9ef", border: "0.5px solid white"}}>
+    //CHANGEMENT DIV PR STACK fluid? ROW
+    <Container
+      fluid
+      // className="Connection"
+      style={{
+        backgroundColor: "#dce9ef",
+        // height: "100%",
+        // border: "0.5px solid white",
+        padding: "0",
+        margin: "0",
+      }}
+    >
       {hasProvider ? (
         window.ethereum?.isMetaMask && wallet?.accounts.length < 1 ? (
           <Button onClick={handleConnect}>Connect MetaMask</Button>
@@ -147,14 +159,13 @@ function Main() {
                 winningProposal={winningProposal}
                 getWinningProposal={getWinningProposal}
               />
-              
             </>
           )
         ) : null
       ) : (
         <div> PLEASE INSTALL METAMASK</div>
       )}
-    </div>
+    </Container>
   );
 }
 
